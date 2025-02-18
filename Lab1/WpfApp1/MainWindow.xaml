@@ -6,31 +6,12 @@
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid ShowGridLines="True">
-        <!-- Визначення стовпців (3) -->
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-
-        <!-- Визначення рядків (3) -->
-        <Grid.RowDefinitions>
-            <RowDefinition Height="1*" />
-            <!-- 1 частина -->
-            <RowDefinition Height="4*" />
-            <!-- 4 частини -->
-            <RowDefinition Height="Auto" />
-            <!-- Автоматична висота -->
-        </Grid.RowDefinitions>
-
-        <!-- Розміщення елементів у другому стовпці -->
-        <Label Content="Label:" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch" />
-        <TextBox Text="TextBox"
-            Grid.Row="1"
-                 TextWrapping="Wrap"
-                 AcceptsReturn="True" 
-                 Grid.ColumnSpan="3"/>
-        <Button Content="Button" Grid.Column="1" Grid.Row="2"  HorizontalAlignment="Stretch"/>
-    </Grid>
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="300">
+        <Label Content="Label" HorizontalAlignment="Center"/>
+        <TextBox Text="TextBox"/>
+        <TextBox Text="TextBox"/>
+        <TextBox Text="TextBox"/>
+        <TextBox Text="TextBox"/>
+        <Button Content="Button" Width="120" Height="20" HorizontalAlignment="Center"  Margin="0,30,0,0"/>
+    </StackPanel>
 </Window>
