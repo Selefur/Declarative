@@ -6,12 +6,27 @@
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="300">
-        <Label Content="Label" HorizontalAlignment="Center"/>
-        <TextBox Text="TextBox"/>
-        <TextBox Text="TextBox"/>
-        <TextBox Text="TextBox"/>
-        <TextBox Text="TextBox"/>
-        <Button Content="Button" Width="120" Height="20" HorizontalAlignment="Center"  Margin="0,30,0,0"/>
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+        <WrapPanel Width="528" Orientation="Horizontal">
+            <Label Content="Label" VerticalAlignment="Center"/>
+            <TextBox Width="60" Height="22"/>
+            <TextBox Width="60" Height="22"/>
+            <TextBox Width="60" Height="22"/>
+            <TextBox Width="60" Height="22"/>
+            <TextBox Width="60" Height="22"/>
+            <TextBox Width="60" Height="22"/>
+            <TextBox Width="60" Height="22"/>
+            <TextBox Width="60" Height="22"/>
+            <Label Content="Label" VerticalAlignment="Center"/>
+            <TextBox Width="60" Height="22"/>
+            <TextBox Width="60" Height="22"/>
+            <TextBox Width="60" Height="22"/>
+            <TextBox Width="60" Height="22"/>
+            <TextBox Width="60" Height="22"/>
+            <TextBox Width="60" Height="22"/>
+            <TextBox Width="60" Height="22"/>
+            <TextBox Width="60" Height="22"/>
+        </WrapPanel>
+        <Button Content="Button" Width="70" Height="22" Margin="0,30,0,0" HorizontalAlignment="Center" />
     </StackPanel>
 </Window>
