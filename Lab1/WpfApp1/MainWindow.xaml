@@ -8,6 +8,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
+        <!-- Верхня рамка для меню -->
         <Border Grid.Row="0" BorderBrush="#FFCBBEBE" BorderThickness="2" CornerRadius="10">
             <StackPanel Orientation="Horizontal" >
                 <Button ToolTip="Відкрити">
@@ -21,13 +22,28 @@
                 <Button ToolTip="Копіювати">
                     <Image Source="images/copy.png" Height="47" Width="47"/>
                 </Button>
-                
+
                 <Button ToolTip="Вставити">
                     <Image Source="images/paste.png" Height="47" Width="47"/>
                 </Button>
             </StackPanel>
         </Border>
 
-        
+        <!-- Рамка з текстовою областю -->
+        <Border Grid.Row="1" BorderBrush="#FFCBBEBE" BorderThickness="2" CornerRadius="10">
+            <Grid  Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBox Grid.Row="0" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" />
+
+                <DockPanel Grid.Row="1" LastChildFill="False">
+                    <Button Content="OK" DockPanel.Dock="Bottom" Width="34" Height="30"/>
+                </DockPanel>
+            </Grid>
+        </Border>
+
     </Grid>
 </Window>
