@@ -51,10 +51,12 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <TextBox Grid.Row="0" AcceptsReturn="True" VerticalScrollBarVisibility="Visible"/>
+                <TextBox x:Name="textBox" Grid.Row="0" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" FontSize="{Binding ElementName=fontSlider, Path=Value}" TextChanged="textBox_TextChanged" Text="Текст"/>
 
                 <DockPanel Grid.Row="1" LastChildFill="False">
                     <Button Content="OK" DockPanel.Dock="Bottom" Width="34" Height="30"/>
+                    <Label Content="Розмір шрифту:" VerticalAlignment="Center" />
+                    <Slider x:Name="fontSlider" Margin="4" MinWidth="100" Maximum="100" Minimum="12" Value="20" ValueChanged="fontSlider_ValueChanged"/>
                 </DockPanel>
             </Grid>
         </Border>
