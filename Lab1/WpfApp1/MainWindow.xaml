@@ -6,10 +6,10 @@
 
         <Label Content="Label" DockPanel.Dock="Top" HorizontalAlignment="Center" Padding="5"/>
         <TextBlock TextWrapping="Wrap" Text="TextBlock" DockPanel.Dock="Left" 
-                   Width="212"/>
+                   Width="200"/>
         <TextBlock TextWrapping="Wrap" Text="TextBlock" DockPanel.Dock="Right" 
-                   Width="212" />
+                   Width="200" />
         <Button Content="Button" DockPanel.Dock="Bottom" Width="114" Height="22" 
-                HorizontalAlignment="Center" Margin="10" VerticalAlignment="Bottom"/>
+                HorizontalAlignment="Center" Margin="40" VerticalAlignment="Bottom"/>
     </DockPanel>
 </Window>
