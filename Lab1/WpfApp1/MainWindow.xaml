@@ -2,14 +2,9 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="316" Width="606">
-    <DockPanel>
-
-        <Label Content="Label" DockPanel.Dock="Top" HorizontalAlignment="Center" Padding="5"/>
-        <TextBlock TextWrapping="Wrap" Text="TextBlock" DockPanel.Dock="Left" 
-                   Width="200"/>
-        <TextBlock TextWrapping="Wrap" Text="TextBlock" DockPanel.Dock="Right" 
-                   Width="200" />
-        <Button Content="Button" DockPanel.Dock="Bottom" Width="114" Height="22" 
-                HorizontalAlignment="Center" Margin="40" VerticalAlignment="Bottom"/>
-    </DockPanel>
+    <Canvas Background="#FF9EE8E6" >
+        <Label Content="Label" Canvas.Left="20" Canvas.Top="18" Height="22" Width="44" FontSize="10"/>
+        <TextBox Text="TextBlock" Width="68" Height="20" Canvas.Left="40" Canvas.Top="40"/>
+        <Button Content="Button" Width="70" Height="23" Canvas.Left="60" Canvas.Top="60"/>
+    </Canvas>
 </Window>
