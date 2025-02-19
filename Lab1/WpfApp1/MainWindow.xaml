@@ -3,13 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="TextEditor" Height="316" Width="606">
     <Window.Resources>
-       
+        <!-- Ресурс для градієнтної заливки жовто-блакитно-жовтої -->
         <LinearGradientBrush x:Key="LinearPanelBrush" StartPoint="0,0" EndPoint="1,1">
             <GradientStop Color="Yellow" Offset="0.0"/>
             <GradientStop Color="Blue" Offset="0.5"/>
             <GradientStop Color="Yellow" Offset="1.0"/>
         </LinearGradientBrush>
 
+        <!-- Стиль для кнопок -->
         <Style x:Key="ButtonStyle" TargetType="Button">
             <Setter Property="Margin" Value="5"/>
             <Setter Property="Background" Value="Transparent"/>
@@ -26,24 +27,25 @@
         <!-- Верхня рамка для меню з градієнтною заливкою -->
         <Border Grid.Row="0" BorderBrush="#FFCBBEBE" BorderThickness="2" CornerRadius="10" Background="{StaticResource LinearPanelBrush}">
             <StackPanel Orientation="Horizontal">
-                <Button ToolTip="Відкрити" Style="{StaticResource ButtonStyle}">
+                <Button ToolTip="Відкрити" Command="Open" Style="{StaticResource ButtonStyle}">
                     <Image Source="images/open.png" Height="47" Width="47"/>
                 </Button>
 
-                <Button ToolTip="Стерти" Style="{StaticResource ButtonStyle}">
+                <Button ToolTip="Стерти" Command="Delete" Style="{StaticResource ButtonStyle}">
                     <Image Source="images/delete.png" Height="47" Width="47"/>
                 </Button>
 
-                <Button ToolTip="Копіювати" Style="{StaticResource ButtonStyle}">
+                <Button ToolTip="Копіювати" Style="{StaticResource ButtonStyle}" Command="Copy" CommandTarget="{Binding ElementName=textBox}">
                     <Image Source="images/copy.png" Height="47" Width="47"/>
                 </Button>
 
-                <Button ToolTip="Вставити" Style="{StaticResource ButtonStyle}">
+                <Button ToolTip="Вставити" Style="{StaticResource ButtonStyle}" Command="Paste" CommandTarget="{Binding ElementName=textBox}" >
                     <Image Source="images/paste.png" Height="47" Width="47"/>
                 </Button>
             </StackPanel>
         </Border>
 
+        <!-- Рамка з текстовою областю з градієнтною заливкою -->
         <Border Grid.Row="1" BorderBrush="#FFCBBEBE" BorderThickness="2" CornerRadius="10" Background="{StaticResource LinearPanelBrush}">
             <Grid Margin="10">
                 <Grid.RowDefinitions>
@@ -51,12 +53,13 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <TextBox x:Name="textBox" Grid.Row="0" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" FontSize="{Binding ElementName=fontSlider, Path=Value}" TextChanged="textBox_TextChanged" Text="Текст"/>
+                <TextBox x:Name="textBox" Grid.Row="0" AcceptsReturn="True" VerticalScrollBarVisibility="Visible"/>
 
                 <DockPanel Grid.Row="1" LastChildFill="False">
-                    <Button Content="OK" DockPanel.Dock="Bottom" Width="34" Height="30"/>
-                    <Label Content="Розмір шрифту:" VerticalAlignment="Center" />
-                    <Slider x:Name="fontSlider" Margin="4" MinWidth="100" Maximum="100" Minimum="12" Value="20" ValueChanged="fontSlider_ValueChanged"/>
+                    <Button ToolTip="Зберегти" Command="ApplicationCommands.Save" Content="OK" DockPanel.Dock="Bottom" Width="34" Height="30"/>
+                    <Label Content="Розмір шрифту:" VerticalAlignment="Center" Margin="4"/>
+                    <Slider x:Name="fontSlider" Margin="4" MinWidth="100" Maximum="100" Minimum="12" Value="20"  ValueChanged="fontSlider_ValueChanged"/>
+
                 </DockPanel>
             </Grid>
         </Border>
