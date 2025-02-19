@@ -1,10 +1,33 @@
 ﻿<Window x:Class="WpfApp1.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="316" Width="606">
-    <Canvas Background="#FF9EE8E6" >
-        <Label Content="Label" Canvas.Left="20" Canvas.Top="18" Height="22" Width="44" FontSize="10"/>
-        <TextBox Text="TextBlock" Width="68" Height="20" Canvas.Left="40" Canvas.Top="40"/>
-        <Button Content="Button" Width="70" Height="23" Canvas.Left="60" Canvas.Top="60"/>
-    </Canvas>
+        Title="TextEditor" Height="316" Width="606">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" BorderBrush="#FFCBBEBE" BorderThickness="2" CornerRadius="10">
+            <StackPanel Orientation="Horizontal" >
+                <Button ToolTip="Відкрити">
+                    <Image Source="images/open.png" Height="47" Width="47"/>
+                </Button>
+
+                <Button ToolTip="Стерти">
+                    <Image Source="images/delete.png" Height="47" Width="47"/>
+                </Button>
+
+                <Button ToolTip="Копіювати">
+                    <Image Source="images/copy.png" Height="47" Width="47"/>
+                </Button>
+                
+                <Button ToolTip="Вставити">
+                    <Image Source="images/paste.png" Height="47" Width="47"/>
+                </Button>
+            </StackPanel>
+        </Border>
+
+        
+    </Grid>
 </Window>
