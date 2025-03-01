@@ -53,7 +53,12 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <TextBox x:Name="textBox" Grid.Row="0" AcceptsReturn="True" VerticalScrollBarVisibility="Visible"/>
+                <TextBox x:Name="textBox" 
+                     Grid.Row="0" 
+                     AcceptsReturn="True" 
+                     VerticalScrollBarVisibility="Auto"
+                    TextWrapping="Wrap"
+                    MinHeight="100"/>
 
                 <DockPanel Grid.Row="1" LastChildFill="False">
                     <Button ToolTip="Зберегти" Command="ApplicationCommands.Save" Content="OK" DockPanel.Dock="Bottom" Width="34" Height="30"/>
