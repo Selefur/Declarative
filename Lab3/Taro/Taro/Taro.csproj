@@ -102,5 +102,17 @@
     <Resource Include="Cards\Card2.jpg" />
     <Resource Include="Cards\Card3.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Cards\Card01.jpg" />
+    <Resource Include="Cards\Card02.jpg" />
+    <Resource Include="Cards\Card03.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Cards\Card4.jpg" />
+    <Resource Include="Cards\Card5.jpg" />
+    <Resource Include="Cards\Card6.jpg" />
+    <Resource Include="Cards\Card7.jpg" />
+    <Resource Include="Cards\Card8.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
