@@ -6,7 +6,7 @@
         <!-- Ресурс для градієнтної заливки жовто-блакитно-жовтої -->
         <LinearGradientBrush x:Key="LinearPanelBrush" StartPoint="0,0" EndPoint="0,1">
             <GradientStop Color="#FF3C362C" Offset="0.0"/>
-            <GradientStop Color="#FF1B1711" Offset="0.5"/>
+            <GradientStop Color="#FF13110C" Offset="0.5"/>
         </LinearGradientBrush>
 
         <!-- Стиль для кнопок -->
