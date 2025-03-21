@@ -13,5 +13,6 @@ namespace Lab4
     /// </summary>
     public partial class App : Application
     {
+        
     }
 }

@@ -1,17 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Lab4.Data;
 
 namespace Lab4
 {
@@ -23,7 +13,23 @@ namespace Lab4
         public MainWindow()
         {
             InitializeComponent();
-            String connectionString = System.Configuration.ConfigurationManager.ConnectionStrings[" connectionStringName "].ConnectionString;
+            Loaded += Window_Loaded; // Додаємо обробник події завантаження вікна
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            AdoAssistant myTable = new AdoAssistant();
+            DataTable data = myTable.TableLoad();
+
+            if (data.Rows.Count > 0) // Перевіряємо, чи є дані
+            {
+                list.ItemsSource = data.DefaultView; // Перетворюємо DataTable у View
+                list.SelectedIndex = 0; // Вибираємо перший елемент у списку
+            }
+            else
+            {
+                MessageBox.Show("Дані не завантажені або таблиця порожня.");
+            }
         }
     }
 }
