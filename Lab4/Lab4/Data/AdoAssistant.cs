@@ -7,44 +7,130 @@ namespace Lab4.Data
 {
     public class AdoAssistant
     {
-        // Отримуємо рядок з'єднання з файлу App.config
         private readonly string connectionString = System.Configuration.ConfigurationManager
             .ConnectionStrings["connectionStringName"].ConnectionString;
 
-        // Об'єкт DataTable для збереження даних
         private DataTable dt;
 
-        // Метод для завантаження даних із таблиці "Клієнти"
         public DataTable TableLoad()
         {
-            if (dt != null) return dt; // Завантажимо таблицю лише один раз
-                                       // Заповнюємо об'єкт таблиці даними з БД
+            if (dt != null) return dt;
             dt = new DataTable();
 
-            // Створюємо об'єкт підключення
-            using (SqlConnection сonnection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                SqlCommand command = сonnection.CreateCommand(); // Створюємо об'єкт команди
-                SqlDataAdapter adapter = new SqlDataAdapter(command); // Створюємо об'єкт читання
+                SqlCommand command = connection.CreateCommand();
+                SqlDataAdapter adapter = new SqlDataAdapter(command);
 
-                // SQL-запит для вибору даних із таблиці "Клієнти"
                 command.CommandText = "SELECT [Id], [Назва] AS [Name], [Телефон] AS [Phone], [Адреса] AS [Address], [Сума замовлення] AS [OrderTotal] FROM [Клієнти]";
 
                 try
                 {
-                    // Метод сам відкриває БД і сам її закриває
                     adapter.Fill(dt);
                 }
                 catch (SqlException ex)
                 {
-                    MessageBox.Show("SQL Error: " + ex.Message); // Показуємо детальну SQL-помилку
+                    MessageBox.Show("SQL Error: " + ex.Message);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Помилка підключення до БД: " + ex.Message); // Інші помилки
+                    MessageBox.Show("Помилка підключення до БД: " + ex.Message);
                 }
             }
+
             return dt;
+        }
+
+        public void AddClient(int id, string name, string phone, string address, decimal orderTotal)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = connection.CreateCommand();
+                command.CommandText = "INSERT INTO Клієнти (Id, Назва, Телефон, Адреса, [Сума замовлення]) VALUES (@Id, @Name, @Phone, @Address, @OrderTotal)";
+
+                command.Parameters.AddWithValue("@Id", id);
+                command.Parameters.AddWithValue("@Name", name);
+                command.Parameters.AddWithValue("@Phone", phone);
+                command.Parameters.AddWithValue("@Address", address);
+                command.Parameters.AddWithValue("@OrderTotal", orderTotal);
+
+                try
+                {
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show("SQL Error: " + ex.Message);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Помилка підключення до БД: " + ex.Message);
+                }
+            }
+        }
+
+
+        public void DeleteClient(int id)
+        {
+            // SQL-запит для видалення клієнта за його ID
+            string query = "DELETE FROM [Клієнти] WHERE [Id] = @Id";
+
+            // Створюємо об'єкт підключення
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                // Створюємо об'єкт команди для виконання запиту
+                SqlCommand command = new SqlCommand(query, connection);
+
+                // Додаємо параметр для запиту
+                command.Parameters.AddWithValue("@Id", id);
+
+                try
+                {
+                    connection.Open();
+                    command.ExecuteNonQuery(); // Виконання запиту типу NonQuery
+                    MessageBox.Show("Клієнта успішно видалено!");
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show("SQL Error: " + ex.Message);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Помилка при видаленні: " + ex.Message);
+                }
+            }
+        }
+
+        public void UpdateClient(int id, string name, string phone, string address, decimal orderTotal)
+        {
+            string query = "UPDATE [Клієнти] SET Назва = @Name, Телефон = @Phone, Адреса = @Address, [Сума замовлення] = @OrderTotal WHERE Id = @Id";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+
+                command.Parameters.AddWithValue("@Id", id);
+                command.Parameters.AddWithValue("@Name", name);
+                command.Parameters.AddWithValue("@Phone", phone);
+                command.Parameters.AddWithValue("@Address", address);
+                command.Parameters.AddWithValue("@OrderTotal", orderTotal);
+
+                try
+                {
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                    MessageBox.Show("Дані клієнта успішно оновлено!");
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show("SQL Error: " + ex.Message);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Помилка при оновленні: " + ex.Message);
+                }
+            }
         }
 
     }

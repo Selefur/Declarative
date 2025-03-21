@@ -7,51 +7,57 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
         Loaded="Window_Loaded">
+    <DockPanel>
+        <!-- Панель інструментів -->
+        <ToolBar DockPanel.Dock="Top">
+            <Button Content="Create" Click="CreateButton_Click" />
+            <Button Content="Delete" Click="DeleteButton_Click" />
+            <Button Content="Update" Click="UpdateButton_Click" />
+        </ToolBar>
 
-    <Grid DataContext="{Binding ElementName=list, Path=SelectedItem}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
 
-        <!-- Список клієнтів -->
-        <ListBox Grid.Row="0" 
-                 Grid.Column="0" 
-                 Grid.ColumnSpan="2" 
-                 Margin="0,0,0,3"
-                 ScrollViewer.VerticalScrollBarVisibility="Auto"
-                 Name="list"
-                 ItemsSource="{Binding}" 
-                 DisplayMemberPath="Phone" />
-        <!-- Виправлено на правильну назву поля -->
+        <Grid DataContext="{Binding ElementName=list, Path=SelectedItem}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-        <!-- ID -->
-        <TextBlock Grid.Row="1" Margin="5">ID:</TextBlock>
-        <TextBox Grid.Row="1" Grid.Column="1"
-                 Text="{Binding Path=Id, Mode=OneWay}" />
+            <ListBox Grid.Row="0" 
+                     Grid.Column="0" 
+                     Grid.ColumnSpan="2" 
+                     Margin="0,0,0,3"
+                     ScrollViewer.VerticalScrollBarVisibility="Auto"
+                     Name="list"
+                     ItemsSource="{Binding}" 
+                     DisplayMemberPath="Phone" />
 
-        <!-- Телефон -->
-        <TextBlock Grid.Row="2" Margin="5">Телефон:</TextBlock>
-        <TextBox Grid.Row="2" Grid.Column="1"
-                 Text="{Binding Path=Phone, Mode=OneWay}" />
-        <!-- Виправлено на "Phone" -->
+            <!-- ID -->
+            <TextBlock Grid.Row="1" Margin="5">ID:</TextBlock>
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Path=Id, Mode=OneWay}" />
 
-        <!-- Адреса -->
-        <TextBlock Grid.Row="3" Margin="5">Адреса:</TextBlock>
-        <TextBox Grid.Row="3" Grid.Column="1"
-                 Text="{Binding Path=Address, Mode=OneWay}" />
+            <!-- Назва -->
+            <TextBlock Grid.Row="2" Margin="5">Назва:</TextBlock>
+            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Path=Name, Mode=OneWay}" />
 
-        <!-- Сума замовлення -->
-        <TextBlock Grid.Row="4" Margin="5">Сума замовлення:</TextBlock>
-        <TextBox Grid.Row="4" Grid.Column="1"
-                 Text="{Binding Path=OrderTotal, Mode=OneWay}" />
-    </Grid>
+            <!-- Телефон -->
+            <TextBlock Grid.Row="3" Margin="5">Телефон:</TextBlock>
+            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Path=Phone, Mode=OneWay}" />
 
+            <!-- Адреса -->
+            <TextBlock Grid.Row="4" Margin="5">Адреса:</TextBlock>
+            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Path=Address, Mode=OneWay}" />
+
+            <!-- Сума замовлення -->
+            <TextBlock Grid.Row="5" Margin="5">Сума замовлення:</TextBlock>
+            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Path=OrderTotal, Mode=OneWay}" />
+        </Grid>
+    </DockPanel>
 </Window>
