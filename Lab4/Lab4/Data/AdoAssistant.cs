@@ -12,34 +12,36 @@ namespace Lab4.Data
 
         private DataTable dt;
 
-        public DataTable TableLoad()
+        public DataTable TableLoad(out SqlDataAdapter adapter)
         {
-            if (dt != null) return dt;
-            dt = new DataTable();
+            DataTable dt = new DataTable();
+            adapter = new SqlDataAdapter();
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                SqlCommand command = connection.CreateCommand();
-                SqlDataAdapter adapter = new SqlDataAdapter(command);
-
-                command.CommandText = "SELECT [Id], [Назва] AS [Name], [Телефон] AS [Phone], [Адреса] AS [Address], [Сума замовлення] AS [OrderTotal] FROM [Клієнти]";
+                string query = "SELECT [Id], [Назва] AS [Name], [Телефон] AS [Phone], [Адреса] AS [Address], [Сума замовлення] AS [OrderTotal] FROM [Клієнти]";
+                SqlCommand command = new SqlCommand(query, connection);
+                adapter.SelectCommand = command;
 
                 try
                 {
                     adapter.Fill(dt);
-                }
-                catch (SqlException ex)
-                {
-                    MessageBox.Show("SQL Error: " + ex.Message);
+
+                    // Команди для оновлення
+                    SqlCommandBuilder builder = new SqlCommandBuilder(adapter);
+                    adapter.InsertCommand = builder.GetInsertCommand();
+                    adapter.UpdateCommand = builder.GetUpdateCommand();
+                    adapter.DeleteCommand = builder.GetDeleteCommand();
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Помилка підключення до БД: " + ex.Message);
+                    MessageBox.Show("Помилка завантаження даних: " + ex.Message);
                 }
             }
 
             return dt;
         }
+
 
         public void AddClient(int id, string name, string phone, string address, decimal orderTotal)
         {
@@ -73,7 +75,7 @@ namespace Lab4.Data
 
         public void DeleteClient(int id)
         {
-            // SQL-запит для видалення клієнта за його ID
+            
             string query = "DELETE FROM [Клієнти] WHERE [Id] = @Id";
 
             // Створюємо об'єкт підключення
@@ -129,6 +131,25 @@ namespace Lab4.Data
                 catch (Exception ex)
                 {
                     MessageBox.Show("Помилка при оновленні: " + ex.Message);
+                }
+            }
+        }
+        public void UpdateDataTable(DataTable table, SqlDataAdapter adapter)
+        {
+            DataTable changes = table.GetChanges();
+
+            if (changes != null)
+            {
+                try
+                {
+                    // Оновлюємо базу даних відповідно до змін у DataTable
+                    adapter.Update(changes);
+                    table.AcceptChanges(); // Підтверджуємо зміни
+                    MessageBox.Show("Зміни успішно збережені в базі!");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Помилка оновлення даних: {ex.Message}");
                 }
             }
         }

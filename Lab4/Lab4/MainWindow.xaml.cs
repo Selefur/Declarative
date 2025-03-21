@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Data.SqlClient;
 using System.Windows;
 using System.Windows.Controls;
 using Lab4.Data;
@@ -9,6 +10,8 @@ namespace Lab4
     public partial class MainWindow : Window
     {
         private AdoAssistant myTable;
+        private SqlDataAdapter adapter;
+        private DataTable dataTable;
 
         public MainWindow()
         {
@@ -25,11 +28,11 @@ namespace Lab4
         private void LoadData()
         {
             // Завантажуємо оновлені дані з бази
-            DataTable data = myTable.TableLoad();
-            if (data.Rows.Count > 0)
+            dataTable = myTable.TableLoad(out adapter);
+            if (dataTable.Rows.Count > 0)
             {
                 // Оновлюємо ItemsSource для ListBox
-                list.ItemsSource = data.DefaultView;
+                list.ItemsSource = dataTable.DefaultView;
                 list.SelectedIndex = 0; // Вибираємо перший елемент у списку
             }
             else
@@ -60,8 +63,8 @@ namespace Lab4
                     myTable.AddClient(id, name, phone, address, orderTotal);
 
                     // Перезавантажуємо дані після додавання нового клієнта
-                    LoadData();
                 }
+                LoadData();
             }
             catch (Exception ex)
             {

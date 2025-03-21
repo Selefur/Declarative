@@ -58,6 +58,7 @@
             <!-- Сума замовлення -->
             <TextBlock Grid.Row="5" Margin="5">Сума замовлення:</TextBlock>
             <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Path=OrderTotal, Mode=OneWay}" />
+           
         </Grid>
     </DockPanel>
 </Window>
