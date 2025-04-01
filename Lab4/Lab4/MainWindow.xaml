@@ -37,7 +37,7 @@
                      ScrollViewer.VerticalScrollBarVisibility="Auto"
                      Name="list"
                      ItemsSource="{Binding}" 
-                     DisplayMemberPath="Phone" />
+                     DisplayMemberPath="Name" />
 
             <!-- ID -->
             <TextBlock Grid.Row="1" Margin="5">ID:</TextBlock>

@@ -29,9 +29,9 @@ namespace Lab4.Data
 
                     // Команди для оновлення
                     SqlCommandBuilder builder = new SqlCommandBuilder(adapter);
-                    adapter.InsertCommand = builder.GetInsertCommand();
+                    //adapter.InsertCommand = builder.GetInsertCommand();
                     adapter.UpdateCommand = builder.GetUpdateCommand();
-                    adapter.DeleteCommand = builder.GetDeleteCommand();
+                   // adapter.DeleteCommand = builder.GetDeleteCommand();
                 }
                 catch (Exception ex)
                 {
