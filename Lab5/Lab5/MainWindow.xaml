@@ -1,26 +1,53 @@
 ﻿<Window x:Class="Lab5.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Lab5"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" MinHeight="300" MinWidth="500">
-
+        Title="Lab5" Height="500" Width="800">
     <Grid>
-        <TabControl Name="MainTabControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <TabControl Name="MainTabControl" Margin="5">
+            <!-- Вкладка 1: Клієнти -->
             <TabItem Header="Клієнти">
                 <Grid>
-                    <DataGrid Name="ClientsDataGrid" AutoGenerateColumns="True"
-                              HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                              Margin="5"/>
+                    <DataGrid Name="ClientsDataGrid" AutoGenerateColumns="True" Margin="5" DockPanel.Dock="Top"/>
                 </Grid>
             </TabItem>
+
+            <!-- Вкладка 2: Компанії -->
             <TabItem Header="Компанії">
                 <Grid>
-                    <DataGrid Name="CompaniesDataGrid" AutoGenerateColumns="True"
-                              HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                              Margin="5"/>
+                    <DataGrid Name="CompaniesDataGrid" AutoGenerateColumns="True" Margin="5" DockPanel.Dock="Top"/>
+                </Grid>
+            </TabItem>
+
+            <!-- Вкладка 3: Клієнти з мінімальними витратами -->
+            <TabItem Header="Мінімальні витрати">
+                <Grid>
+                    <DataGrid Name="MinExpensesDataGrid" AutoGenerateColumns="True" Margin="5"/>
+                </Grid>
+            </TabItem>
+
+
+            <!-- Вкладка 4: Пошук клієнта -->
+            <TabItem Header="Пошук клієнта">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <TextBlock Text="Назва клієнта:" VerticalAlignment="Center" Margin="5"/>
+                        <TextBox Name="ClientNameTextBox" Width="200" Margin="5"/>
+                        <Button Name="SearchClientButton" Content="Пошук" Click="SearchClientButton_Click" Margin="5"/>
+                    </StackPanel>
+
+                    <DataGrid Name="FilteredClientsDataGrid" AutoGenerateColumns="True" Margin="5" Grid.Row="1"/>
+                </Grid>
+            </TabItem>
+
+            <!-- Вкладка 5: Загальна сума надходжень по компаніях -->
+            <TabItem Header="Надходження по компаніях">
+                <Grid>
+                    <DataGrid Name="TotalRevenueDataGrid" AutoGenerateColumns="True" Margin="5"/>
                 </Grid>
             </TabItem>
         </TabControl>

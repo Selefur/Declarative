@@ -1,44 +1,53 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Linq;
-using System.Windows;
-using System.Data.Entity;
 
 namespace Lab5
 {
     public partial class MainWindow : Window
     {
-        private Lab5Entities1 dbContext;
+        private Lab5Entities1 db = new Lab5Entities1();
 
         public MainWindow()
         {
             InitializeComponent();
-            dbContext = new Lab5Entities1();
-
             LoadData();
         }
 
         private void LoadData()
         {
-            // Завантаження даних у DataGrid
-            dbContext.Клієнти.Load();
-            dbContext.Компанії.Load();
+            ClientsDataGrid.ItemsSource = db.Клієнти.ToList();
+            CompaniesDataGrid.ItemsSource = db.Компанії.ToList();
 
-            ClientsDataGrid.ItemsSource = dbContext.Клієнти.Local.ToBindingList();
-            CompaniesDataGrid.ItemsSource = dbContext.Компанії.Local.ToBindingList();
+            var minExpensesByCompany = db.Клієнти
+            .GroupBy(c => c.Код_компанії)  // Групуємо по Код_компанії
+            .Select(g => new
+            {
+                КодКомпанії = g.Key,
+                МінімальніВитрати = g.Min(c => c.Витрати)  // Знаходимо мінімальні витрати
+            })
+            .ToList();
+
+            // Відображаємо результат у DataGrid
+            MinExpensesDataGrid.ItemsSource = minExpensesByCompany;
+           
+            TotalRevenueDataGrid.ItemsSource = db.Клієнти
+                .GroupBy(c => c.Код_компанії)
+                .Select(g => new
+                {
+                    КодКомпанії = g.Key,
+                    ЗагальніНадходження = g.Sum(c => (decimal?)c.Витрати) ?? 0
+                })
+                .ToList();
+
+        }
+
+        private void SearchClientButton_Click(object sender, RoutedEventArgs e)
+        {
+            string searchText = ClientNameTextBox.Text.Trim();
+            FilteredClientsDataGrid.ItemsSource = db.Клієнти
+                .Where(c => c.Назва.Contains(searchText))
+                .ToList();
         }
     }
 }
-
