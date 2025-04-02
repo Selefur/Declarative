@@ -20,26 +20,52 @@ namespace Lab5
             CompaniesDataGrid.ItemsSource = db.Компанії.ToList();
 
             var minExpensesByCompany = db.Клієнти
-            .GroupBy(c => c.Код_компанії)  // Групуємо по Код_компанії
-            .Select(g => new
-            {
-                КодКомпанії = g.Key,
-                МінімальніВитрати = g.Min(c => c.Витрати)  // Знаходимо мінімальні витрати
-            })
-            .ToList();
-
-            // Відображаємо результат у DataGrid
-            MinExpensesDataGrid.ItemsSource = minExpensesByCompany;
-           
-            TotalRevenueDataGrid.ItemsSource = db.Клієнти
-                .GroupBy(c => c.Код_компанії)
+                .Select(c => new {
+                    c.Код_компанії,
+                    c.Витрати,
+                    CompanyName = db.Компанії.FirstOrDefault(comp => comp.Код_компанії == c.Код_компанії).C_Назва_компанії
+                })
+                .GroupBy(c => new { c.Код_компанії, c.CompanyName })
                 .Select(g => new
                 {
-                    КодКомпанії = g.Key,
-                    ЗагальніНадходження = g.Sum(c => (decimal?)c.Витрати) ?? 0
+                    НазваКомпанії = g.Key.CompanyName,
+                    МінімальніВитрати = g.Min(c => c.Витрати)
                 })
                 .ToList();
 
+            MinExpensesDataGrid.ItemsSource = minExpensesByCompany;
+
+            var revenueData = db.Клієнти
+                .Select(c => new {
+                    c.Код_компанії,
+                    c.Витрати,
+                    CompanyName = db.Компанії.FirstOrDefault(comp => comp.Код_компанії == c.Код_компанії).C_Назва_компанії
+                })
+                .ToList()
+                .GroupBy(c => new { c.Код_компанії, c.CompanyName })
+                .Select(g => new
+                {
+                    НазваКомпанії = g.Key.CompanyName,
+                    ЗагальніВитрати = g.Sum(c => c.Витрати)
+                })
+                .ToList();
+
+            TotalRevenueDataGrid.ItemsSource = revenueData;
+
+            var clientsWithCompanies = db.Клієнти
+                .Join(db.Компанії,
+                    client => client.Код_компанії,
+                    company => company.Код_компанії,
+                    (client, company) => new
+                    {
+                        Клієнт = client.Назва,
+                        Телефон = client.Телефон,
+                        Компанія = company.C_Назва_компанії,
+                        Витрати = client.Витрати
+                    })
+                .ToList();
+
+            ClientsWithCompaniesDataGrid.ItemsSource = clientsWithCompanies;
         }
 
         private void SearchClientButton_Click(object sender, RoutedEventArgs e)

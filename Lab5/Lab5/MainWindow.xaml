@@ -7,14 +7,14 @@
             <!-- Вкладка 1: Клієнти -->
             <TabItem Header="Клієнти">
                 <Grid>
-                    <DataGrid Name="ClientsDataGrid" AutoGenerateColumns="True" Margin="5" DockPanel.Dock="Top"/>
+                    <DataGrid Name="ClientsDataGrid" AutoGenerateColumns="True" Margin="5"/>
                 </Grid>
             </TabItem>
 
             <!-- Вкладка 2: Компанії -->
             <TabItem Header="Компанії">
                 <Grid>
-                    <DataGrid Name="CompaniesDataGrid" AutoGenerateColumns="True" Margin="5" DockPanel.Dock="Top"/>
+                    <DataGrid Name="CompaniesDataGrid" AutoGenerateColumns="True" Margin="5"/>
                 </Grid>
             </TabItem>
 
@@ -25,7 +25,6 @@
                 </Grid>
             </TabItem>
 
-
             <!-- Вкладка 4: Пошук клієнта -->
             <TabItem Header="Пошук клієнта">
                 <Grid>
@@ -33,13 +32,11 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-
                     <StackPanel Orientation="Horizontal" Margin="5">
                         <TextBlock Text="Назва клієнта:" VerticalAlignment="Center" Margin="5"/>
                         <TextBox Name="ClientNameTextBox" Width="200" Margin="5"/>
                         <Button Name="SearchClientButton" Content="Пошук" Click="SearchClientButton_Click" Margin="5"/>
                     </StackPanel>
-
                     <DataGrid Name="FilteredClientsDataGrid" AutoGenerateColumns="True" Margin="5" Grid.Row="1"/>
                 </Grid>
             </TabItem>
@@ -48,6 +45,13 @@
             <TabItem Header="Надходження по компаніях">
                 <Grid>
                     <DataGrid Name="TotalRevenueDataGrid" AutoGenerateColumns="True" Margin="5"/>
+                </Grid>
+            </TabItem>
+
+            <!-- Вкладка 6: Клієнти з компаніями (JOIN) -->
+            <TabItem Header="Клієнти та компанії">
+                <Grid>
+                    <DataGrid Name="ClientsWithCompaniesDataGrid" AutoGenerateColumns="True" Margin="5"/>
                 </Grid>
             </TabItem>
         </TabControl>
