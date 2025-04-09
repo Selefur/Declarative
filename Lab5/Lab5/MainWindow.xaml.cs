@@ -23,7 +23,7 @@ namespace Lab5
                 .Select(c => new {
                     c.Код_компанії,
                     c.Витрати,
-                    CompanyName = db.Компанії.FirstOrDefault(comp => comp.Код_компанії == c.Код_компанії).C_Назва_компанії
+                    CompanyName = db.Компанії.FirstOrDefault(comp => comp.Код_компанії == c.Код_компанії).Назва_компанії  
                 })
                 .GroupBy(c => new { c.Код_компанії, c.CompanyName })
                 .Select(g => new
@@ -39,7 +39,7 @@ namespace Lab5
                 .Select(c => new {
                     c.Код_компанії,
                     c.Витрати,
-                    CompanyName = db.Компанії.FirstOrDefault(comp => comp.Код_компанії == c.Код_компанії).C_Назва_компанії
+                    CompanyName = db.Компанії.FirstOrDefault(comp => comp.Код_компанії == c.Код_компанії).Назва_компанії  
                 })
                 .ToList()
                 .GroupBy(c => new { c.Код_компанії, c.CompanyName })
@@ -60,13 +60,15 @@ namespace Lab5
                     {
                         Клієнт = client.Назва,
                         Телефон = client.Телефон,
-                        Компанія = company.C_Назва_компанії,
+                        Компанія = company.Назва_компанії, 
                         Витрати = client.Витрати
                     })
                 .ToList();
 
             ClientsWithCompaniesDataGrid.ItemsSource = clientsWithCompanies;
         }
+
+
 
         private void SearchClientButton_Click(object sender, RoutedEventArgs e)
         {

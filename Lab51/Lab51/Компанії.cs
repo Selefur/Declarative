@@ -7,14 +7,23 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Lab5
+namespace Lab51
 {
     using System;
     using System.Collections.Generic;
     
     public partial class Компанії
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Компанії()
+        {
+            this.Клієнти = new HashSet<Клієнти>();
+        }
+    
         public int Код_компанії { get; set; }
         public string Назва_компанії { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Клієнти> Клієнти { get; set; }
     }
 }

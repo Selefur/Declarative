@@ -7,14 +7,20 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Lab5
+namespace Lab51
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Компанії
+    public partial class Клієнти
     {
-        public int Код_компанії { get; set; }
-        public string Назва_компанії { get; set; }
+        public int Id { get; set; }
+        public string Назва { get; set; }
+        public string Телефон { get; set; }
+        public Nullable<int> Код_компанії { get; set; }
+        public string Надходження { get; set; }
+        public Nullable<decimal> Витрати { get; set; }
+    
+        public virtual Компанії Компанії { get; set; }
     }
 }

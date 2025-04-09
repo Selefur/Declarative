@@ -5,18 +5,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CC4E378B-6894-4A5F-91C2-C7CA1F251B42}</ProjectGuid>
+    <ProjectGuid>{DC76F144-7494-4CFA-99FE-F365F60903E4}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Lab5</RootNamespace>
-    <AssemblyName>Lab5</AssemblyName>
+    <RootNamespace>Lab51</RootNamespace>
+    <AssemblyName>Lab51</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -32,6 +30,8 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -61,6 +61,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
@@ -82,16 +83,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Directory.cs">
+    <Compile Include="ClientComp.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Directory.tt</DependentUpon>
+      <DependentUpon>ClientComp.tt</DependentUpon>
     </Compile>
     <Compile Include="Клієнти.cs">
-      <DependentUpon>Directory.tt</DependentUpon>
+      <DependentUpon>ClientComp.tt</DependentUpon>
     </Compile>
     <Compile Include="Компанії.cs">
-      <DependentUpon>Directory.tt</DependentUpon>
+      <DependentUpon>ClientComp.tt</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -101,15 +102,15 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Directory.Context.cs">
+    <Compile Include="ClientComp.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Directory.Context.tt</DependentUpon>
+      <DependentUpon>ClientComp.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Directory.Designer.cs">
+    <Compile Include="ClientComp.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Directory.edmx</DependentUpon>
+      <DependentUpon>ClientComp.edmx</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -134,12 +135,12 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EntityDeploy Include="Directory.edmx">
+    <EntityDeploy Include="ClientComp.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Directory.Designer.cs</LastGenOutput>
+      <LastGenOutput>ClientComp.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="Directory.edmx.diagram">
-      <DependentUpon>Directory.edmx</DependentUpon>
+    <None Include="ClientComp.edmx.diagram">
+      <DependentUpon>ClientComp.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -151,26 +152,23 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Directory.Context.tt">
+    <Content Include="ClientComp.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Directory.edmx</DependentUpon>
-      <LastGenOutput>Directory.Context.cs</LastGenOutput>
+      <DependentUpon>ClientComp.edmx</DependentUpon>
+      <LastGenOutput>ClientComp.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Directory.tt">
+    <Content Include="ClientComp.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Directory.edmx</DependentUpon>
-      <LastGenOutput>Directory.cs</LastGenOutput>
+      <DependentUpon>ClientComp.edmx</DependentUpon>
+      <LastGenOutput>ClientComp.cs</LastGenOutput>
     </Content>
-    <Content Include="Lab5.mdf">
+    <Content Include="Lab51.mdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Lab5_log.ldf">
+    <Content Include="Lab51_log.ldf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <DependentUpon>Lab5.mdf</DependentUpon>
+      <DependentUpon>Lab51.mdf</DependentUpon>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
@@ -183,6 +181,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
