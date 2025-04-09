@@ -17,7 +17,7 @@ namespace Lab5
         public int Id { get; set; }
         public string Назва { get; set; }
         public string Телефон { get; set; }
-        public Nullable<int> Код_компанії { get; set; }
+        public int Код_компанії { get; set; }
         public string Надходження { get; set; }
         public Nullable<decimal> Витрати { get; set; }
     }

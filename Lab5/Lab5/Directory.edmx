@@ -39,7 +39,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="Назва" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
           <Property Name="Телефон" Type="String" MaxLength="13" FixedLength="true" Unicode="true" />
-          <Property Name="Код_компанії" Type="Int32" />
+          <Property Name="Код_компанії" Type="Int32" Nullable="false" />
           <Property Name="Надходження" Type="String" MaxLength="60" FixedLength="true" Unicode="true" />
           <Property Name="Витрати" Type="Decimal" Precision="18" Scale="2" />
         </EntityType>
