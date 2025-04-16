@@ -5,8 +5,55 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Lab51"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800"
+        >
     <Grid>
-        
+        <TabControl Name="MainTabControl" Margin="5">
+            <!-- Вкладка 1: Клієнти -->
+            <TabItem Header="Клієнти">
+                <Grid>
+                    <DataGrid Name="ClientsDataGrid" AutoGenerateColumns="True" Margin="5"/>
+                </Grid>
+            </TabItem>
+
+            <!-- Вкладка 2: Компанії -->
+            <TabItem Header="Компанії">
+                <Grid>
+                    <DataGrid Name="CompaniesDataGrid" AutoGenerateColumns="True" Margin="5"/>
+                </Grid>
+            </TabItem>
+
+            <!-- Вкладка 3: Клієнти з мінімальними витратами -->
+            <TabItem Header="Мінімальні витрати">
+                <Grid>
+                    <DataGrid Name="MinExpensesDataGrid" AutoGenerateColumns="True" Margin="5"/>
+                </Grid>
+            </TabItem>
+
+            <!-- Вкладка 4: Пошук клієнта -->
+            <TabItem Header="Пошук клієнта">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <TextBlock Text="Назва клієнта:" VerticalAlignment="Center" Margin="5"/>
+                        <TextBox Name="ClientNameTextBox" Width="200" Margin="5"/>
+                        <Button Name="SearchClientButton" Content="Пошук" Click="SearchClientButton_Click" Margin="5"/>
+                    </StackPanel>
+                    <DataGrid Name="FilteredClientsDataGrid" AutoGenerateColumns="True" Margin="5" Grid.Row="1"/>
+                </Grid>
+            </TabItem>
+
+            <!-- Вкладка 5: Загальна сума надходжень по компаніях -->
+            <TabItem Header="Надходження по компаніях">
+                <Grid>
+                    <DataGrid Name="TotalRevenueDataGrid" AutoGenerateColumns="True" Margin="5"/>
+                </Grid>
+            </TabItem>
+
+           
+        </TabControl>
     </Grid>
 </Window>
