@@ -1,0 +1,90 @@
+﻿<Window x:Class="FortuneTeller.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Ворожка" Height="800" Width="800" MinWidth="500" MinHeight="600">
+    <Window.Resources>
+        <!-- Ресурс для градієнтної заливки -->
+        <LinearGradientBrush x:Key="LinearPanelBrush" StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#FF3C362C" Offset="0.0"/>
+            <GradientStop Color="#FF13110C" Offset="0.5"/>
+        </LinearGradientBrush>
+
+        <!-- Стиль для кнопок -->
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#FFCECAB4"/>
+            <Setter Property="BorderBrush" Value="#FF907209"/>
+            <Setter Property="Foreground" Value="#FF3C362C"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <!-- Стиль для текстових міток -->
+        <Style TargetType="Label">
+            <Setter Property="Foreground" Value="#FFDCD8C5"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,0,5,0"/>
+        </Style>
+
+        <!-- Стиль для текстових полів вводу -->
+        <Style TargetType="TextBox">
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <!-- Стиль для випадаючого списку -->
+        <Style TargetType="ComboBox">
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+    </Window.Resources>
+    <Grid Background="{StaticResource LinearPanelBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Заголовок -->
+            <RowDefinition Height="Auto"/>
+            <!-- Поле імені -->
+            <RowDefinition Height="Auto"/>
+            <!-- Вибір категорії -->
+            <RowDefinition Height="*"/>
+            <!-- Карти -->
+            <RowDefinition Height="Auto"/>
+            <!-- Поле для передбачення -->
+            <RowDefinition Height="Auto"/>
+            <!-- Кнопка -->
+        </Grid.RowDefinitions>
+
+        <!-- Заголовок -->
+        <TextBlock Grid.Row="0" Text="Обери свою долю" FontSize="28" FontWeight="Bold" Foreground="#FFDCD8C5"
+                   HorizontalAlignment="Center" Margin="10,10,10,5"/>
+
+        <!-- Поле для введення імені -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10,5">
+            <Label Content="Ваше ім'я:" Target="{Binding ElementName=NameTextBox}"/>
+            <TextBox x:Name="NameTextBox" Width="200"/>
+        </StackPanel>
+
+        <!-- Випадаючий список для вибору категорії -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10,5">
+            <Label Content="Категорія питання:" Target="{Binding ElementName=CategoryComboBox}"/>
+            <ComboBox x:Name="CategoryComboBox" Width="200"/>
+        </StackPanel>
+
+        <!-- Контейнер для карт -->
+        <UniformGrid Grid.Row="3" Name="CardGrid" Columns="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                     Margin="10, 15"/>
+        <!-- Збільшено відступ зверху/знизу -->
+
+        <!-- Текстове поле для відображення результату передбачення -->
+        <TextBlock Grid.Row="4" x:Name="PredictionTextBlock"
+                   FontSize="22" FontWeight="SemiBold" Foreground="#FFFFE082" 
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                   Margin="10, 5, 10, 15" TextWrapping="Wrap"/> <!-- Додано відступ знизу -->
+
+        <!-- Кнопка для отримання передбачення -->
+        <Button Grid.Row="5" Content="Передбачення"
+                HorizontalAlignment="Center" Margin="10, 0, 10, 20"
+                Click="PredictButton_Click" Style="{StaticResource ButtonStyle}"/>
+    </Grid>
+</Window>
