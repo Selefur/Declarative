@@ -4,12 +4,16 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using System.Data.Entity; 
+using Taro2._0_Lab6_;
+using System.Threading.Tasks;
+
 
 namespace FortuneTeller
 {
     public partial class MainWindow : Window
     {
-        // Шляхи до ВСІХ можливих карт (включаючи ті, що можуть бути стартовими)
+        // --- Старі змінні (карти, фрази) ---
         private readonly List<string> cardImages = new List<string>
         {
             "Cards/Card0.jpg", "Cards/Card1.jpg", "Cards/Card2.jpg",
@@ -17,37 +21,224 @@ namespace FortuneTeller
             "Cards/Card6.jpg", "Cards/Card7.jpg", "Cards/Card8.jpg",
             "Cards/Card01.jpg", "Cards/Card02.jpg", "Cards/Card03.jpg"
         };
-
-        // Шляхи до ТРЬОХ карт, які показуються СПОЧАТКУ
         private readonly List<string> defaultCards = new List<string>
         {
             "Cards/Card01.jpg", "Cards/Card02.jpg", "Cards/Card03.jpg"
         };
-
-        // Список категорій питань
-        private readonly List<string> categories = new List<string>
-        {
-            "Гроші", "Сім'я", "Кар'єра", "Хобі", "Любов", "Здоров'я", "Подорожі"
-        };
-
-        // Можливі варіанти відповідей
         private readonly List<string> predictionPhrases = new List<string>
         {
             "Так", "Ні", "Скоріше так", "Скоріше ні", "Можливо", "Спитай пізніше"
         };
-
         private readonly Random random = new Random();
+
+        // Список для зберігання завантажених категорій
+        private List<Question> loadedCategories = new List<Question>();
 
         public MainWindow()
         {
             InitializeComponent();
-            LoadDefaultCards();
-            PopulateCategories();
-            ClearPrediction();
         }
 
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            LoadDefaultCards();
+            await LoadCategoriesFromDbAsync();
+            ClearPrediction();
+            await LoadClientHistoryAsync();
+        }
+
+        private async Task LoadCategoriesFromDbAsync()
+        {
+            try
+            {
+                using (var dbContext = new TaroEntities())
+                {
+                    // Тепер ToListAsync() має бути доступним завдяки using System.Data.Entity;
+                    loadedCategories = await dbContext.Question.OrderBy(q => q.Id).ToListAsync();
+                }
+
+                CategoryComboBox.ItemsSource = loadedCategories;
+                if (loadedCategories.Count > 0)
+                {
+                    CategoryComboBox.SelectedIndex = 0;
+                }
+                // Перевіряємо, чи кнопка існує перед зверненням (хоча помилка CS0103 вказує, що її немає в контексті)
+                if (this.FindName("PredictButton") is Button predictBtn)
+                {
+                    predictBtn.IsEnabled = true; // Вмикаємо кнопку, якщо категорії завантажились
+                }
+                if (CategoryComboBox != null)
+                {
+                    CategoryComboBox.IsEnabled = true;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Помилка завантаження категорій з бази даних: {ex.Message}\n\nПеревірте рядок підключення та доступність бази даних.",
+                                "Помилка бази даних", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                // Блокуємо функціонал, якщо категорії не завантажились
+                // Перевіряємо наявність перед доступом
+                if (this.FindName("PredictButton") is Button predictBtn)
+                {
+                    predictBtn.IsEnabled = false;
+                }
+                if (CategoryComboBox != null)
+                {
+                    CategoryComboBox.IsEnabled = false;
+                }
+            }
+        }
+
+        private async Task LoadClientHistoryAsync()
+        {
+            try
+            {
+                List<Client> history;
+                using (var dbContext = new TaroEntities())
+                {
+                    // Include та ToListAsync() теж мають працювати
+                    history = await dbContext.Client
+                                          .Include(c => c.Question)
+                                          .OrderByDescending(c => c.Id)
+                                          .ToListAsync(); // <--- Помилка тут теж має зникнути
+                }
+                // Перевіряємо, чи ClientHistoryGrid існує
+                if (ClientHistoryGrid != null)
+                {
+                    ClientHistoryGrid.ItemsSource = history;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Помилка завантаження історії з бази даних: {ex.Message}",
+                               "Помилка бази даних", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private async void PredictButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(NameTextBox.Text))
+            {
+                MessageBox.Show("Будь ласка, введіть ваше ім'я.", "Ім'я не введено", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (CategoryComboBox.SelectedItem == null)
+            {
+                MessageBox.Show("Будь ласка, оберіть категорію питання.", "Категорія не обрана", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            Question selectedQuestion = CategoryComboBox.SelectedItem as Question;
+            if (selectedQuestion == null)
+            {
+                MessageBox.Show("Помилка отримання вибраної категорії.", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            CardGrid.Children.Clear();
+            var availableCards = cardImages.Except(defaultCards).ToList();
+            int numberOfCardsToSelect = 3;
+
+            if (availableCards.Count < numberOfCardsToSelect)
+            {
+                ClearPrediction();
+                MessageBox.Show("Недостатньо унікальних карт для нового передбачення.", "Помилка карт", MessageBoxButton.OK, MessageBoxImage.Error);
+                LoadDefaultCards();
+                return;
+            }
+
+            var selectedCards = new HashSet<string>();
+            while (selectedCards.Count < numberOfCardsToSelect)
+            {
+                if (availableCards.Count == 0) break;
+                int randomIndex = random.Next(availableCards.Count);
+                string chosenCard = availableCards[randomIndex];
+                selectedCards.Add(chosenCard);
+                availableCards.RemoveAt(randomIndex);
+            }
+
+            if (selectedCards.Count < numberOfCardsToSelect)
+            {
+                ClearPrediction();
+                MessageBox.Show("Не вдалося вибрати потрібну кількість унікальних карт.", "Помилка вибору карт", MessageBoxButton.OK, MessageBoxImage.Error);
+                LoadDefaultCards();
+                return;
+            }
+
+            foreach (var cardPath in selectedCards)
+            {
+                CardGrid.Children.Add(CreateImage(cardPath));
+            }
+
+            string prediction = GetPredictionPhrase();
+            if (string.IsNullOrEmpty(prediction))
+            {
+                MessageBox.Show("Не вдалося згенерувати передбачення.", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            PredictionTextBlock.Text = $"{NameTextBox.Text}, твоя відповідь: {prediction}";
+
+            // AnyAsync, MaxAsync, SaveChangesAsync() мають стати доступними
+            await SavePredictionToDbAsync(NameTextBox.Text, selectedQuestion.Id, prediction);
+
+            if (MainTabControl.SelectedIndex == 1)
+            {
+                await LoadClientHistoryAsync();
+            }
+        }
+
+        private string GetPredictionPhrase()
+        {
+            if (predictionPhrases.Count > 0)
+            {
+                return predictionPhrases[random.Next(predictionPhrases.Count)];
+            }
+            return null;
+        }
+
+        private async Task SavePredictionToDbAsync(string clientName, int questionId, string answer)
+        {
+            try
+            {
+                using (var dbContext = new TaroEntities())
+                {
+                    int nextId = 1;
+                    // AnyAsync() та MaxAsync() мають працювати
+                    if (await dbContext.Client.AnyAsync()) // <--- Помилка тут має зникнути
+                    {
+                        nextId = await dbContext.Client.MaxAsync(c => c.Id) + 1; // <--- Помилка тут має зникнути
+                    }
+
+                    var newClientEntry = new Client
+                    {
+                        Id = nextId,
+                        Name = clientName.Trim(),
+                        IDQuestion = questionId,
+                        Answer = answer
+                    };
+
+                    dbContext.Client.Add(newClientEntry);
+                    // SaveChangesAsync() має працювати
+                    await dbContext.SaveChangesAsync(); // <--- Помилка тут має зникнути
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Помилка збереження передбачення в базу даних: {ex.Message}",
+                               "Помилка бази даних", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        // --- Старі методи (LoadDefaultCards, ClearPrediction, CreateImage) ---
+        // ... (код цих методів залишається без змін) ...
         private void LoadDefaultCards()
         {
+            // Перевіряємо наявність CardGrid
+            if (CardGrid == null) return;
+
             CardGrid.Children.Clear();
             foreach (var cardPath in defaultCards)
             {
@@ -62,76 +253,20 @@ namespace FortuneTeller
             }
             while (CardGrid.Children.Count < 3)
             {
-                var placeholder = new Image { Height = 500, Margin = new Thickness(5), Stretch = System.Windows.Media.Stretch.Uniform };
+                var placeholder = new Image { Height = 450, Margin = new Thickness(5), Stretch = System.Windows.Media.Stretch.Uniform };
                 CardGrid.Children.Add(placeholder);
                 if (CardGrid.Children.Count >= 3) break;
             }
             ClearPrediction();
         }
-
-        private void PopulateCategories()
-        {
-            CategoryComboBox.ItemsSource = categories;
-            if (categories.Count > 0)
-            {
-                CategoryComboBox.SelectedIndex = 0;
-            }
-        }
-
-        // Обробник натискання кнопки "Передбачення"
-        private void PredictButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Перевірка, чи введено ім'я
-            if (string.IsNullOrWhiteSpace(NameTextBox.Text))
-            {
-                MessageBox.Show("Будь ласка, введіть ваше ім'я перед тим, як отримати передбачення.",
-                                "Ім'я не введено", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return; // Вихід з методу, якщо ім'я не введено
-            }
-
-            // Якщо ім'я введено, продовжуємо виконання:
-            CardGrid.Children.Clear();
-
-            var availableCards = cardImages.Except(defaultCards).ToList();
-
-            var selectedCards = new HashSet<string>();
-            while (selectedCards.Count < 3)
-            {
-                // Перевірка на випадок, якщо availableCards стане порожнім (малоймовірно при попередній перевірці, але безпечніше)
-                if (availableCards.Count == 0) break;
-
-                int randomIndex = random.Next(availableCards.Count);
-                string chosenCard = availableCards[randomIndex];
-                selectedCards.Add(chosenCard);
-                availableCards.RemoveAt(randomIndex);
-            }
-
-            foreach (var cardPath in selectedCards)
-            {
-                CardGrid.Children.Add(CreateImage(cardPath));
-            }
-
-            ShowPrediction();
-        }
-
-        private void ShowPrediction()
-        {
-            if (predictionPhrases.Count > 0)
-            {
-                string prediction = predictionPhrases[random.Next(predictionPhrases.Count)];
-                PredictionTextBlock.Text = $"{NameTextBox.Text}, твоя відповідь: {prediction}"; // Додаємо ім'я до відповіді
-            }
-            else
-            {
-                PredictionTextBlock.Text = "Немає фраз для передбачення.";
-            }
-        }
-
         private void ClearPrediction()
         {
-            PredictionTextBlock.Text = string.Empty;
+            // Перевіряємо наявність PredictionTextBlock
+            if (PredictionTextBlock != null)
+            {
+                PredictionTextBlock.Text = string.Empty;
+            }
         }
-
         private Image CreateImage(string path)
         {
             try
@@ -139,7 +274,7 @@ namespace FortuneTeller
                 return new Image
                 {
                     Source = new BitmapImage(new Uri(path, UriKind.Relative)),
-                    Height = 500,
+                    Height = 450,
                     Stretch = System.Windows.Media.Stretch.Uniform,
                     Margin = new Thickness(5)
                 };
@@ -147,8 +282,27 @@ namespace FortuneTeller
             catch (Exception ex)
             {
                 Console.WriteLine($"Error loading image '{path}': {ex.Message}");
-                return new Image { Height = 500, Margin = new Thickness(5) };
+                return new Image { Height = 450, Margin = new Thickness(5) };
             }
+        }
+
+
+        private async void MainTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.OriginalSource == MainTabControl) // Перевіряємо, що подія саме від TabControl
+            {
+                if (MainTabControl.SelectedIndex == 1 && ClientHistoryGrid != null) // Перевіряємо індекс і наявність грід
+                {
+                    await LoadClientHistoryAsync();
+                }
+            }
+            e.Handled = true; // Позначаємо подію як оброблену, щоб уникнути можливих проблем з вкладеними елементами
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            // Якщо використовували б dbContext як член класу:
+            // dbContext?.Dispose(); 
         }
     }
 }
