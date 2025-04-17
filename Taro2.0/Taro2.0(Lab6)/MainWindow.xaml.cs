@@ -13,7 +13,6 @@ namespace FortuneTeller
 {
     public partial class MainWindow : Window
     {
-        // --- Старі змінні (карти, фрази) ---
         private readonly List<string> cardImages = new List<string>
         {
             "Cards/Card0.jpg", "Cards/Card1.jpg", "Cards/Card2.jpg",
@@ -53,7 +52,6 @@ namespace FortuneTeller
             {
                 using (var dbContext = new TaroEntities())
                 {
-                    // Тепер ToListAsync() має бути доступним завдяки using System.Data.Entity;
                     loadedCategories = await dbContext.Question.OrderBy(q => q.Id).ToListAsync();
                 }
 
@@ -61,15 +59,6 @@ namespace FortuneTeller
                 if (loadedCategories.Count > 0)
                 {
                     CategoryComboBox.SelectedIndex = 0;
-                }
-                // Перевіряємо, чи кнопка існує перед зверненням (хоча помилка CS0103 вказує, що її немає в контексті)
-                if (this.FindName("PredictButton") is Button predictBtn)
-                {
-                    predictBtn.IsEnabled = true; // Вмикаємо кнопку, якщо категорії завантажились
-                }
-                if (CategoryComboBox != null)
-                {
-                    CategoryComboBox.IsEnabled = true;
                 }
 
             }
@@ -80,10 +69,6 @@ namespace FortuneTeller
 
                 // Блокуємо функціонал, якщо категорії не завантажились
                 // Перевіряємо наявність перед доступом
-                if (this.FindName("PredictButton") is Button predictBtn)
-                {
-                    predictBtn.IsEnabled = false;
-                }
                 if (CategoryComboBox != null)
                 {
                     CategoryComboBox.IsEnabled = false;
@@ -98,11 +83,10 @@ namespace FortuneTeller
                 List<Client> history;
                 using (var dbContext = new TaroEntities())
                 {
-                    // Include та ToListAsync() теж мають працювати
                     history = await dbContext.Client
                                           .Include(c => c.Question)
                                           .OrderByDescending(c => c.Id)
-                                          .ToListAsync(); // <--- Помилка тут теж має зникнути
+                                          .ToListAsync(); 
                 }
                 // Перевіряємо, чи ClientHistoryGrid існує
                 if (ClientHistoryGrid != null)
@@ -140,9 +124,8 @@ namespace FortuneTeller
 
             CardGrid.Children.Clear();
             var availableCards = cardImages.Except(defaultCards).ToList();
-            int numberOfCardsToSelect = 3;
 
-            if (availableCards.Count < numberOfCardsToSelect)
+            if (availableCards.Count < 3)
             {
                 ClearPrediction();
                 MessageBox.Show("Недостатньо унікальних карт для нового передбачення.", "Помилка карт", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -151,21 +134,13 @@ namespace FortuneTeller
             }
 
             var selectedCards = new HashSet<string>();
-            while (selectedCards.Count < numberOfCardsToSelect)
+            while (selectedCards.Count < 3)
             {
                 if (availableCards.Count == 0) break;
                 int randomIndex = random.Next(availableCards.Count);
                 string chosenCard = availableCards[randomIndex];
                 selectedCards.Add(chosenCard);
                 availableCards.RemoveAt(randomIndex);
-            }
-
-            if (selectedCards.Count < numberOfCardsToSelect)
-            {
-                ClearPrediction();
-                MessageBox.Show("Не вдалося вибрати потрібну кількість унікальних карт.", "Помилка вибору карт", MessageBoxButton.OK, MessageBoxImage.Error);
-                LoadDefaultCards();
-                return;
             }
 
             foreach (var cardPath in selectedCards)
@@ -181,7 +156,6 @@ namespace FortuneTeller
             }
             PredictionTextBlock.Text = $"{NameTextBox.Text}, твоя відповідь: {prediction}";
 
-            // AnyAsync, MaxAsync, SaveChangesAsync() мають стати доступними
             await SavePredictionToDbAsync(NameTextBox.Text, selectedQuestion.Id, prediction);
 
             if (MainTabControl.SelectedIndex == 1)
@@ -206,10 +180,9 @@ namespace FortuneTeller
                 using (var dbContext = new TaroEntities())
                 {
                     int nextId = 1;
-                    // AnyAsync() та MaxAsync() мають працювати
-                    if (await dbContext.Client.AnyAsync()) // <--- Помилка тут має зникнути
+                    if (await dbContext.Client.AnyAsync()) 
                     {
-                        nextId = await dbContext.Client.MaxAsync(c => c.Id) + 1; // <--- Помилка тут має зникнути
+                        nextId = await dbContext.Client.MaxAsync(c => c.Id) + 1;
                     }
 
                     var newClientEntry = new Client
@@ -221,8 +194,7 @@ namespace FortuneTeller
                     };
 
                     dbContext.Client.Add(newClientEntry);
-                    // SaveChangesAsync() має працювати
-                    await dbContext.SaveChangesAsync(); // <--- Помилка тут має зникнути
+                    await dbContext.SaveChangesAsync();
                 }
             }
             catch (Exception ex)
@@ -232,8 +204,6 @@ namespace FortuneTeller
             }
         }
 
-        // --- Старі методи (LoadDefaultCards, ClearPrediction, CreateImage) ---
-        // ... (код цих методів залишається без змін) ...
         private void LoadDefaultCards()
         {
             // Перевіряємо наявність CardGrid
@@ -301,8 +271,7 @@ namespace FortuneTeller
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            // Якщо використовували б dbContext як член класу:
-            // dbContext?.Dispose(); 
+           
         }
     }
 }

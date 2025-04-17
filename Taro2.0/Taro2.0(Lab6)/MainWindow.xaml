@@ -22,7 +22,6 @@
             <Setter Property="Padding" Value="10,5"/>
             <Setter Property="FontSize" Value="16"/>
             <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="MinWidth" Value="100"/>
         </Style>
 
         <!-- Стиль для текстових міток -->
@@ -56,23 +55,14 @@
             <Setter Property="Padding" Value="10,5"/>
             <Setter Property="BorderThickness" Value="1,1,1,0"/>
             <Setter Property="BorderBrush" Value="#FF907209"/>
-            <Style.Triggers>
-                <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="Background" Value="#FF60584D"/>
-                    <Setter Property="Foreground" Value="White"/>
-                </Trigger>
-            </Style.Triggers>
+            
         </Style>
 
         <!-- Стиль для DataGrid -->
         <Style TargetType="DataGrid">
             <Setter Property="Background" Value="#FF4A443A"/>
-            <Setter Property="Foreground" Value="#FFDCD8C5"/>
+            <Setter Property="Foreground" Value="#FF27251D"/>
             <Setter Property="BorderBrush" Value="#FF907209"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="HorizontalGridLinesBrush" Value="#FF60584D"/>
-            <Setter Property="VerticalGridLinesBrush" Value="#FF60584D"/>
-            <Setter Property="AlternatingRowBackground" Value="#FF554E43"/>
             <Setter Property="AutoGenerateColumns" Value="False"/>
             <!-- Важливо для налаштування стовпців -->
             <Setter Property="CanUserAddRows" Value="False"/>
@@ -124,11 +114,9 @@
                     <!-- Випадаючий список для вибору категорії -->
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10,5">
                         <Label Content="Категорія питання:" Target="{Binding ElementName=CategoryComboBox}"/>
-                        <!-- DataContext і ItemsSource будуть встановлені з коду -->
                         <ComboBox x:Name="CategoryComboBox"
                                   DisplayMemberPath="Name"
                                   SelectedValuePath="Id"/>
-                        <!--ItemsSource="{Binding CategoriesList}"  Можна і так, якщо використовувати ViewModel-->
                     </StackPanel>
 
                     <!-- Контейнер для карт -->
@@ -155,7 +143,6 @@
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
                             <DataGridTextColumn Header="Ім'я клієнта" Binding="{Binding Name}" Width="*"/>
-                            <!-- Використовуємо Navigation Property для отримання імені питання -->
                             <DataGridTextColumn Header="Категорія питання" Binding="{Binding Question.Name}" Width="1.5*"/>
                             <DataGridTextColumn Header="Відповідь" Binding="{Binding Answer}" Width="*"/>
                         </DataGrid.Columns>
