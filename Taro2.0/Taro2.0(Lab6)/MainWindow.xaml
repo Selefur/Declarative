@@ -55,7 +55,7 @@
             <Setter Property="Padding" Value="10,5"/>
             <Setter Property="BorderThickness" Value="1,1,1,0"/>
             <Setter Property="BorderBrush" Value="#FF907209"/>
-            
+
         </Style>
 
         <!-- Стиль для DataGrid -->
@@ -64,9 +64,6 @@
             <Setter Property="Foreground" Value="#FF27251D"/>
             <Setter Property="BorderBrush" Value="#FF907209"/>
             <Setter Property="AutoGenerateColumns" Value="False"/>
-            <!-- Важливо для налаштування стовпців -->
-            <Setter Property="CanUserAddRows" Value="False"/>
-            <Setter Property="CanUserDeleteRows" Value="False"/>
             <Setter Property="IsReadOnly" Value="True"/>
         </Style>
         <Style TargetType="DataGridColumnHeader">
@@ -139,7 +136,14 @@
             <!-- ВКЛАДКА 2: Історія -->
             <TabItem Header="Історія">
                 <Grid Margin="10">
-                    <DataGrid Name="ClientHistoryGrid">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <!-- Row for DataGrid -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- Row for Button -->
+                    </Grid.RowDefinitions>
+
+                    <DataGrid Grid.Row="0" Name="ClientHistoryGrid">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
                             <DataGridTextColumn Header="Ім'я клієнта" Binding="{Binding Name}" Width="*"/>
@@ -147,6 +151,15 @@
                             <DataGridTextColumn Header="Відповідь" Binding="{Binding Answer}" Width="*"/>
                         </DataGrid.Columns>
                     </DataGrid>
+
+                    <Button Grid.Row="1"
+                            Name="DeleteAllHistoryButton"
+                            Content="Видалити всю історію"
+                            Style="{StaticResource ButtonStyle}"
+                            HorizontalAlignment="Center"
+                            Margin="0,10,0,10"
+                            Click="DeleteAllHistoryButton_Click"/>
+
                 </Grid>
             </TabItem>
         </TabControl>
