@@ -41,7 +41,6 @@ namespace FortuneTeller
             LoadDefaultCards();
             await LoadCategoriesFromDbAsync();
             ClearPrediction();
-            // Initial load for history tab if it's selected first (or just always load)
             await LoadClientHistoryAsync();
         }
 
@@ -79,17 +78,14 @@ namespace FortuneTeller
 
         private async Task LoadClientHistoryAsync()
         {
-            // Check if ClientHistoryGrid exists before proceeding
-            if (ClientHistoryGrid == null) return;
 
             try
             {
                 List<Client> history;
                 using (var dbContext = new TaroEntities()) // Replace TaroEntities with your actual context name
                 {
-                    // Eagerly load the related Question entity
                     history = await dbContext.Client
-                                          .Include(c => c.Question) // Include related Question data
+                                          .Include(c => c.Question) 
                                           .OrderByDescending(c => c.Id)
                                           .ToListAsync();
                 }
@@ -99,7 +95,7 @@ namespace FortuneTeller
             {
                 MessageBox.Show($"Помилка завантаження історії з бази даних: {ex.Message}",
                                "Помилка бази даних", MessageBoxButton.OK, MessageBoxImage.Error);
-                // Optionally clear the grid or show an error state
+               
                 ClientHistoryGrid.ItemsSource = null;
             }
         }
@@ -113,21 +109,8 @@ namespace FortuneTeller
                 return;
             }
 
-            if (CategoryComboBox.SelectedItem == null)
-            {
-                MessageBox.Show("Будь ласка, оберіть категорію питання.", "Категорія не обрана", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
             Question selectedQuestion = CategoryComboBox.SelectedItem as Question;
-            if (selectedQuestion == null)
-            {
-                MessageBox.Show("Помилка отримання вибраної категорії.", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
 
-            // Check if CardGrid exists
-            if (CardGrid == null) return;
 
             CardGrid.Children.Clear();
             var availableCards = cardImages.Except(defaultCards).ToList();
@@ -135,7 +118,7 @@ namespace FortuneTeller
             var selectedCards = new HashSet<string>();
             while (selectedCards.Count < 3)
             {
-                if (availableCards.Count == 0) break; // Should not happen with the check above, but safe
+                if (availableCards.Count == 0) break; 
                 int randomIndex = random.Next(availableCards.Count);
                 string chosenCard = availableCards[randomIndex];
                 selectedCards.Add(chosenCard);
@@ -183,9 +166,6 @@ namespace FortuneTeller
             {
                 using (var dbContext = new TaroEntities()) // Replace TaroEntities with your actual context name
                 {
-                    // Determine the next available ID. This can be prone to race conditions
-                    // if multiple instances run concurrently. Databases often handle this better
-                    // with IDENTITY columns. If your ID is auto-incrementing, remove this logic.
                     int nextId = 1;
                     if (await dbContext.Client.AnyAsync()) // Check if there are any clients
                     {
@@ -195,8 +175,8 @@ namespace FortuneTeller
 
                     var newClientEntry = new Client
                     {
-                        Id = nextId, // Assign the manually calculated ID
-                        Name = clientName.Trim(), // Trim whitespace
+                        Id = nextId,
+                        Name = clientName.Trim(),
                         IDQuestion = questionId,
                         Answer = answer
                     };
@@ -207,8 +187,6 @@ namespace FortuneTeller
             }
             catch (Exception ex)
             {
-                // Log the full exception details if possible (for debugging)
-                // Consider using a logging framework
                 Console.WriteLine($"Database Save Error: {ex.ToString()}");
 
                 MessageBox.Show($"Помилка збереження передбачення в базу даних: {ex.Message}",
@@ -219,7 +197,6 @@ namespace FortuneTeller
 
         private void LoadDefaultCards()
         {
-            if (CardGrid == null) return;
 
             CardGrid.Children.Clear();
             foreach (var cardPath in defaultCards)
@@ -231,19 +208,17 @@ namespace FortuneTeller
                 }
                 else
                 {
-                    // Log or handle the case where a default card path is invalid
                     Console.WriteLine($"Warning: Default card path '{cardPath}' is invalid or missing from cardImages list.");
                     // Optionally add a placeholder image
                     var placeholder = new Border { BorderBrush = Brushes.Gray, BorderThickness = new Thickness(1), Width = 100, Height = 150, Margin = new Thickness(5) };
                     CardGrid.Children.Add(placeholder);
                 }
             }
-            // Ensure exactly 3 elements (cards or placeholders) if needed
             while (CardGrid.Children.Count < 3)
             {
                 var placeholder = new Border { BorderBrush = Brushes.Gray, BorderThickness = new Thickness(1), Width = 100, Height = 150, Margin = new Thickness(5) };
                 CardGrid.Children.Add(placeholder);
-                if (CardGrid.Children.Count >= 3) break; // Safety break
+                if (CardGrid.Children.Count >= 3) break; 
             }
             ClearPrediction();
         }
@@ -262,27 +237,23 @@ namespace FortuneTeller
             {
                 return new Image
                 {
-                    Source = new BitmapImage(new Uri(path, UriKind.Relative)), // Assuming paths are relative to executable
-                    Height = 450, // Consider making this dynamic or binding it
+                    Source = new BitmapImage(new Uri(path, UriKind.Relative)), 
+                    Height = 450, 
                     Stretch = System.Windows.Media.Stretch.Uniform,
                     Margin = new Thickness(5)
                 };
             }
             catch (Exception ex)
             {
-                // Log error or show placeholder
                 Console.WriteLine($"Error loading image '{path}': {ex.Message}");
-                // Return a placeholder or default image
-                return new Image { Height = 450, Margin = new Thickness(5) /*, Source = placeholderBitmap */ };
+                return new Image { Height = 450, Margin = new Thickness(5) };
             }
         }
 
         private async void MainTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // Ensure the event source is the TabControl itself, not an element within it
             if (e.OriginalSource == MainTabControl)
             {
-                // Check if the selected tab is the History tab (index 1) and the grid exists
                 if (MainTabControl.SelectedIndex == 1 && ClientHistoryGrid != null)
                 {
                     await LoadClientHistoryAsync();
