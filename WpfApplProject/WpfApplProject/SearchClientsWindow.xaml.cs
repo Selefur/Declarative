@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Windows;
-using System.Data.Entity; // Потрібно для Include, Where, ToListAsync
+using System.Data.Entity;
 using System.Threading.Tasks;
-using WpfApplProject; // Ваш простір імен з моделлю Client та контекстом
+using WpfApplProject; // Ваш простір імен моделі та контексту
+using System.Windows.Input; // Потрібно для команд
 
 namespace FortuneTeller
 {
@@ -12,42 +13,35 @@ namespace FortuneTeller
         public SearchClientsWindow()
         {
             InitializeComponent();
+            // Можна встановити фокус на поле пошуку при відкритті
+            Loaded += (sender, e) => SearchTextBox.Focus();
         }
 
         // Обробник кнопки "Знайти"
         private async void SearchButton_Click(object sender, RoutedEventArgs e)
         {
-            // Отримуємо текст пошуку з TextBox
             string searchText = SearchTextBox.Text.Trim();
 
-            // Якщо текст порожній, можемо очистити результати або нічого не робити
             if (string.IsNullOrEmpty(searchText))
             {
-                ResultsDataGrid.ItemsSource = null; // Очищаємо таблицю
-                // Або можна показати повідомлення
-                // MessageBox.Show("Введіть ім'я для пошуку.", "Пошук", MessageBoxButton.OK, MessageBoxImage.Information);
+                ResultsDataGrid.ItemsSource = null;
                 return;
             }
 
-            // Виконуємо пошук в базі даних
             try
             {
-                using (var dbContext = new TaroDBEntities()) // Використовуємо ваш контекст
+                using (var dbContext = new TaroDBEntities())
                 {
-                    // Виконуємо асинхронний запит до БД
-                    var searchResults = await dbContext.Client // Наша таблиця/модель Client
-                        .Include(c => c.Question) // Включаємо дані питання для відображення
-                        .Where(c => c.Name.Contains(searchText)) // Фільтруємо за іменем (Name)
-                                                                 // Примітка: Contains зазвичай чутливий до регістру в SQL Server.
-                                                                 // Для нечутливого пошуку краще:
-                                                                 // .Where(c => c.Name.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0)
-                        .OrderBy(c => c.Name) // Сортуємо результати (опціонально)
-                        .ToListAsync(); // Отримуємо список клієнтів
+                    var searchResults = await dbContext.Client
+                        .Include(c => c.Question)
+                        // Розгляньте використання IndexOf для пошуку без урахування регістру:
+                        // .Where(c => c.Name.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0)
+                        .Where(c => c.Name.Contains(searchText))
+                        .OrderBy(c => c.Name)
+                        .ToListAsync();
 
-                    // Встановлюємо результати як джерело даних для DataGrid
                     ResultsDataGrid.ItemsSource = searchResults;
 
-                    // Якщо результатів немає, можна повідомити
                     if (!searchResults.Any())
                     {
                         MessageBox.Show("Клієнтів з таким іменем не знайдено.", "Пошук", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -57,7 +51,7 @@ namespace FortuneTeller
             catch (Exception ex)
             {
                 MessageBox.Show($"Помилка під час пошуку: {ex.Message}", "Помилка бази даних", MessageBoxButton.OK, MessageBoxImage.Error);
-                ResultsDataGrid.ItemsSource = null; // Очищаємо у разі помилки
+                ResultsDataGrid.ItemsSource = null;
             }
         }
 
@@ -65,7 +59,22 @@ namespace FortuneTeller
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
             SearchTextBox.Text = string.Empty;
-            ResultsDataGrid.ItemsSource = null; // Очищаємо таблицю результатів
+            ResultsDataGrid.ItemsSource = null;
+        }
+
+        // --- Обробники команди Undo (Скасувати/Закрити) ---
+        private void Undo_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            // Завжди можна закрити вікно пошуку
+            e.CanExecute = true;
+            e.Handled = true;
+        }
+
+        private void Undo_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            // Дія - просто закрити вікно
+            this.Close();
+            e.Handled = true;
         }
     }
 }
