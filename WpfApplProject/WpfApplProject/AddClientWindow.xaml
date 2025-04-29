@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FortuneTeller"
-         xmlns:cmd="clr-namespace:FortuneTeller.Commands" 
+        xmlns:cmd="clr-namespace:FortuneTeller.Commands" 
     mc:Ignorable="d"
         Title="Додати нового клієнта" Height="300" Width="450"
         WindowStartupLocation="CenterOwner"
@@ -12,10 +12,10 @@
         SizeToContent="Height" MinWidth="400"
         Loaded="Window_Loaded">
 
-    <!-- Додаємо CommandBinding для команди Undo -->
+    <!-- Додаємо CommandBindings -->
     <Window.CommandBindings>
         <CommandBinding Command="{x:Static cmd:DataCommands.Undo}" Executed="Undo_Executed" CanExecute="Undo_CanExecute" />
-        <!-- Можливо, тут знадобляться й інші CommandBindings, якщо будуть відповідні кнопки/меню -->
+        <CommandBinding Command="{x:Static cmd:DataCommands.Save}" Executed="Save_Executed" CanExecute="Save_CanExecute" />
     </Window.CommandBindings>
 
     <Grid Margin="15">
@@ -49,18 +49,30 @@
         <!-- Кнопки -->
         <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"
                     Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
-            <Button x:Name="SaveButton" Content="Зберегти"
-                    Style="{StaticResource ButtonStyle}" Margin="0,0,10,0"
-                    IsDefault="True" Click="SaveButton_Click"/>
-            <!-- Зберегти поки залишаємо з Click -->
 
-            <!-- Кнопка Скасувати тепер використовує команду Undo -->
-            <Button x:Name="CancelButton" 
+            <!-- Кнопка Зберегти тепер використовує команду Save -->
+            <Button x:Name="SaveButton"
+                    Style="{StaticResource ButtonStyle}" Margin="0,0,10,0"
+                    Command="{x:Static cmd:DataCommands.Save}"
+                    ToolTip="Зберегти клієнта (Ctrl+S)">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="Images/save.png" Width="16" Height="16" Margin="0,0,5,0"/>
+                    <TextBlock Text="Зберегти"/>
+                </StackPanel>
+            </Button>
+            <!-- IsDefault="True" прибрано, бо команда може обробляти Enter -->
+
+            <!-- Кнопка Скасувати використовує команду Undo -->
+            <Button x:Name="CancelButton"
                     Style="{StaticResource ButtonStyle}"
                     Command="{x:Static cmd:DataCommands.Undo}"
                     ToolTip="Скасувати додавання (Ctrl+Z)">
-                <Image Source="Images/cancel.png" Width="16" Height="16" Margin="0,0,5,0"/>
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="Images/cancel.png" Width="16" Height="16" Margin="0,0,5,0"/>
+                    <TextBlock Text="Скасувати"/>
+                </StackPanel>
             </Button>
+
         </StackPanel>
     </Grid>
 </Window>

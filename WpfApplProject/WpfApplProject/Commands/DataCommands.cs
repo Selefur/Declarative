@@ -43,7 +43,7 @@ namespace FortuneTeller.Commands // Переконайтесь, що namespace �
 
             // Видалити (Delete)
             InputGestureCollection deleteGestures = new InputGestureCollection();
-            deleteGestures.Add(new KeyGesture(Key.Delete, ModifierKeys.None, "Delete"));
+            deleteGestures.Add(new KeyGesture(Key.D, ModifierKeys.Control, "Ctrl+D"));
             Delete = new RoutedCommand("Delete", typeof(DataCommands), deleteGestures);
         }
     }

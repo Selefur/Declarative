@@ -14,7 +14,6 @@
     <Page.CommandBindings>
         <CommandBinding Command="{x:Static cmd:DataCommands.New}" Executed="New_Executed" CanExecute="New_CanExecute" />
         <CommandBinding Command="{x:Static cmd:DataCommands.Replace}" Executed="Replace_Executed" CanExecute="Replace_CanExecute" />
-        <CommandBinding Command="{x:Static cmd:DataCommands.Save}" Executed="Save_Executed" CanExecute="Save_CanExecute" />
         <CommandBinding Command="{x:Static cmd:DataCommands.Find}" Executed="Find_Executed" CanExecute="Find_CanExecute" />
         <CommandBinding Command="{x:Static cmd:DataCommands.Delete}" Executed="Delete_Executed" CanExecute="Delete_CanExecute" />
     </Page.CommandBindings>
@@ -48,12 +47,6 @@
                         <Image Source="Images/edit.png" Width="16" Height="16" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Зберегти (_S)" Command="{x:Static cmd:DataCommands.Save}">
-                    <!-- Command замість Click, _S для Alt+S -->
-                    <MenuItem.Icon>
-                        <Image Source="Images/save.png" Width="16" Height="16" />
-                    </MenuItem.Icon>
-                </MenuItem>
                 <MenuItem Header="Знайти (_F)" Command="{x:Static cmd:DataCommands.Find}">
                     <!-- Command замість Click, _F для Alt+F -->
                     <MenuItem.Icon>
@@ -80,14 +73,11 @@
                 <Button ToolTip="Редагувати (F2)" Command="{x:Static cmd:DataCommands.Replace}">
                     <Image Source="Images/edit.png" Width="24" Height="24"/>
                 </Button>
-                <Button ToolTip="Зберегти (Ctrl+S)" Command="{x:Static cmd:DataCommands.Save}">
-                    <Image Source="Images/save.png" Width="24" Height="24"/>
-                </Button>
                 <Button ToolTip="Знайти (Ctrl+F)" Command="{x:Static cmd:DataCommands.Find}">
                     <Image Source="Images/find.png" Width="24" Height="24"/>
                 </Button>
                 <Separator />
-                <Button ToolTip="Видалити (Del)" Command="{x:Static cmd:DataCommands.Delete}">
+                <Button ToolTip="Видалити (Ctrl+D)" Command="{x:Static cmd:DataCommands.Delete}">
                     <Image Source="Images/delete.png" Width="24" Height="24"/>
                 </Button>
             </ToolBar>
