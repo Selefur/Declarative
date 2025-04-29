@@ -1,121 +1,46 @@
-﻿<Page x:Class="WpfApplProject.PageClients"
+﻿<Page x:Class="FortuneTeller.PageClients"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:local="clr-namespace:WpfApplProject"
+      xmlns:local="clr-namespace:FortuneTeller"
       mc:Ignorable="d"
-      d:DesignHeight="550" d:DesignWidth="780"
-      Title="Історія Клієнтів"
+      d:DesignHeight="700" d:DesignWidth="750"
+      Title="Історія Передбачень"
       Loaded="Page_Loaded">
-    <Grid Background="WhiteSmoke">
+    <Grid Margin="10" Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <!-- Row for Menu and Toolbar -->
-            <RowDefinition Height="*"/>
-            <!-- Row for DataGrid -->
+            <RowDefinition Height="*" />
             <RowDefinition Height="Auto"/>
-            <!-- Row for Status Bar (optional) -->
         </Grid.RowDefinitions>
 
-        <!-- StackPanel holding Menu and Toolbar -->
-        <StackPanel Grid.Row="0" Orientation="Vertical">
-            <!-- Menu -->
-            <Menu Margin="0,0,0,2">
-                <MenuItem Header="_Дія">
-                    <MenuItem Header="_Скасувати" Click="Cancel_Click">
-                        <MenuItem.Icon>
-                            <Image Source="/Images/cancel.png" Height="16"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <Separator />
-                    <MenuItem Header="_Створити" Click="Create_Click">
-                        <MenuItem.Icon>
-                            <Image Source="/Images/add.png" Height="16"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Header="_Редагувати" Click="Edit_Click">
-                        <MenuItem.Icon>
-                            <Image Source="/Images/edit.png" Height="16"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Header="_Зберегти" Click="Save_Click">
-                        <MenuItem.Icon>
-                            <Image Source="/Images/save.png" Height="16"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <Separator />
-                    <MenuItem Header="_Знайти" Click="Find_Click">
-                        <MenuItem.Icon>
-                            <Image Source="/Images/find.png" Height="16"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Header="_Видалити" Click="Delete_Click">
-                        <MenuItem.Icon>
-                            <Image Source="/Images/delete.png" Height="16"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                </MenuItem>
-                <MenuItem Header="_Звіт">
-                    <!-- Add report sub-items here later if needed -->
-                    <MenuItem Header="Друк списку..." Click="Print_Click" IsEnabled="False"/>
-                </MenuItem>
-            </Menu>
+        <TextBlock Grid.Row="0" Text="Історія Передбачень Клієнтів" FontSize="24" FontWeight="Bold" Foreground="#FFDCD8C5"
+                   HorizontalAlignment="Center" Margin="0,5,0,15"/>
 
-            <!-- Toolbar -->
-            <ToolBar Margin="0,2,0,5">
-                <Button ToolTip="Скасувати зміни" Click="Cancel_Click">
-                    <Image Source="/Images/cancel.png" Height="20"/>
-                </Button>
-                <Separator/>
-                <Button ToolTip="Створити новий запис" Click="Create_Click">
-                    <Image Source="/Images/add.png" Height="20"/>
-                </Button>
-                <Button ToolTip="Редагувати вибраний запис" Click="Edit_Click">
-                    <Image Source="/Images/edit.png" Height="20"/>
-                </Button>
-                <Button ToolTip="Зберегти зміни" Click="Save_Click">
-                    <Image Source="/Images/save.png" Height="20"/>
-                </Button>
-                <Separator/>
-                <Button ToolTip="Знайти записи" Click="Find_Click">
-                    <Image Source="/Images/find.png" Height="20"/>
-                </Button>
-                <Button ToolTip="Видалити вибраний запис" Click="Delete_Click">
-                    <Image Source="/Images/delete.png" Height="20"/>
-                </Button>
-            </ToolBar>
-        </StackPanel>
-
-        <!-- Data Grid -->
-        <DataGrid Grid.Row="1" Name="ClientsDataGrid"
+        <DataGrid Grid.Row="1"
+                  Name="ClientHistoryGrid"
                   AutoGenerateColumns="False"
+                  IsReadOnly="True"
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
-                  IsReadOnly="True"
                   SelectionMode="Single"
-                  ItemsSource="{Binding ClientsList}"
-                  Margin="5"
-                  AlternatingRowBackground="LightBlue"
-                  RowBackground="White" >
+                  ItemsSource="{Binding ClientList}">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
+                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="60"/>
                 <DataGridTextColumn Header="Ім'я клієнта" Binding="{Binding Name}" Width="*"/>
-                <!-- Accessing nested property Question.Name -->
                 <DataGridTextColumn Header="Категорія питання" Binding="{Binding Question.Name}" Width="1.5*"/>
                 <DataGridTextColumn Header="Відповідь" Binding="{Binding Answer}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
 
-        <!-- Optional Status Bar -->
-        <StatusBar Grid.Row="2" Background="LightGray" Height="25">
-            <StatusBarItem>
-                <TextBlock Name="StatusTextBlock" Text="Готово" Margin="5,0"/>
-            </StatusBarItem>
-            <StatusBarItem HorizontalAlignment="Right">
-                <TextBlock Name="RecordCountTextBlock" Text="Записів: 0" Margin="5,0"/>
-            </StatusBarItem>
-        </StatusBar>
+        <Button Grid.Row="2"
+                Name="DeleteAllHistoryButton"
+                Content="Видалити всю історію"
+                HorizontalAlignment="Center"
+                Margin="0,15,0,10"
+                Click="DeleteAllHistoryButton_Click"
+                Style="{StaticResource ButtonStyle}"/>
 
     </Grid>
 </Page>

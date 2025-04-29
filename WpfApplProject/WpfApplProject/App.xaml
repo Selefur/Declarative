@@ -1,9 +1,89 @@
 ﻿<Application x:Class="WpfApplProject.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:WpfApplProject"
+             xmlns:local="clr-namespace:FortuneTeller"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <!-- Ресурс для градієнтної заливки -->
+        <LinearGradientBrush x:Key="LinearPanelBrush" StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#FF3C362C" Offset="0.0"/>
+            <GradientStop Color="#FF13110C" Offset="0.5"/>
+        </LinearGradientBrush>
+
+        <!-- Стиль для кнопок -->
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#FFCECAB4"/>
+            <Setter Property="BorderBrush" Value="#FF907209"/>
+            <Setter Property="Foreground" Value="#FF3C362C"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="MinWidth" Value="100"/>
+            <!-- Ensure minimum width -->
+        </Style>
+
+        <!-- Стиль для текстових міток -->
+        <Style TargetType="Label">
+            <Setter Property="Foreground" Value="#FFDCD8C5"/>
+            <!-- Adjusted for potentially lighter backgrounds -->
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,0,5,0"/>
+        </Style>
+
+        <!-- Стиль для текстових полів вводу -->
+        <Style TargetType="TextBox">
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="MinWidth" Value="200"/>
+        </Style>
+
+        <!-- Стиль для випадаючого списку -->
+        <Style TargetType="ComboBox">
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="MinWidth" Value="200"/>
+        </Style>
+
+        <!-- Стиль для DataGrid -->
+        <Style TargetType="DataGrid">
+            <Setter Property="Background" Value="#FF4A443A"/>
+            <Setter Property="Foreground" Value="#FF27251D"/>
+            <Setter Property="BorderBrush" Value="#FF907209"/>
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="CanUserDeleteRows" Value="False"/>
+            <Setter Property="SelectionMode" Value="Single"/>
+            <Setter Property="AlternatingRowBackground" Value="#FF5a544a"/>
+            <!-- Slightly lighter alt row -->
+            <Setter Property="RowBackground" Value="#FF4A443A"/>
+        </Style>
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#FF907209"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="5"/>
+        </Style>
+        <Style TargetType="DataGridRow">
+            <Setter Property="Padding" Value="3"/>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="Goldenrod"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="DataGridCell">
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Foreground" Value="#FFDCD8C5"/>
+            <!-- Text color inside cells -->
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Foreground" Value="Black"/>
+                    <!-- Text color in selected cell -->
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
     </Application.Resources>
 </Application>

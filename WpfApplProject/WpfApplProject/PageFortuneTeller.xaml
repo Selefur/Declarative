@@ -1,0 +1,61 @@
+﻿<Page x:Class="FortuneTeller.PageFortuneTeller"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:FortuneTeller"
+      mc:Ignorable="d"
+      d:DesignHeight="700" d:DesignWidth="750"
+      Title="Передбачення"
+      Loaded="Page_Loaded">
+    <Grid Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Заголовок -->
+        <TextBlock Grid.Row="0" Text="Обери свою долю" FontSize="28" FontWeight="Bold" Foreground="#FFDCD8C5"
+                   HorizontalAlignment="Center" Margin="10,15,10,10"/>
+
+        <!-- Поле для введення імені -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10,10">
+            <!-- Label will use implicit style -->
+            <Label Content="Ваше ім'я:" Target="{Binding ElementName=NameTextBox}"/>
+            <!-- TextBox will use implicit style -->
+            <TextBox x:Name="NameTextBox"/>
+        </StackPanel>
+
+        <!-- Випадаючий список для вибору категорії -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10,5">
+            <!-- Label will use implicit style -->
+            <Label Content="Категорія питання:" Target="{Binding ElementName=CategoryComboBox}"/>
+            <!-- ComboBox will use implicit style -->
+            <ComboBox x:Name="CategoryComboBox"
+                      DisplayMemberPath="Name"
+                      SelectedValuePath="Id"/>
+        </StackPanel>
+
+        <!-- Контейнер для карт -->
+        <Viewbox Grid.Row="3" Stretch="Uniform" Margin="10, 15">
+            <UniformGrid Name="CardGrid" Columns="3" HorizontalAlignment="Center" VerticalAlignment="Center"
+                         Width="650" Height="400"/>
+        </Viewbox>
+
+        <!-- Текстове поле для відображення результату передбачення -->
+        <TextBlock Grid.Row="4" x:Name="PredictionTextBlock"
+                   FontSize="22" FontWeight="SemiBold" Foreground="#FFFFE082"
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                   Margin="10, 10, 10, 15" TextWrapping="Wrap" TextAlignment="Center"/>
+
+        <!-- Кнопка для отримання передбачення -->
+        <Button Grid.Row="5" Content="Передбачення" x:Name="PredictButton"
+                HorizontalAlignment="Center" Margin="10, 0, 10, 20"
+                Click="PredictButton_Click"
+                Style="{StaticResource ButtonStyle}"/>
+    </Grid>
+</Page>
