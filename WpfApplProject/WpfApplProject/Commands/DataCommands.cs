@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 
-namespace FortuneTeller.Commands // Переконайтесь, що namespace відповідає вашому проекту
+namespace FortuneTeller.Commands 
 {
     public static class DataCommands
     {

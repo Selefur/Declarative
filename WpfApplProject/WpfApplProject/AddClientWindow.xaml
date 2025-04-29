@@ -60,7 +60,6 @@
                     <TextBlock Text="Зберегти"/>
                 </StackPanel>
             </Button>
-            <!-- IsDefault="True" прибрано, бо команда може обробляти Enter -->
 
             <!-- Кнопка Скасувати використовує команду Undo -->
             <Button x:Name="CancelButton"
