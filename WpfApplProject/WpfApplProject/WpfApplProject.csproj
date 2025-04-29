@@ -84,9 +84,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AddClientWindow.xaml.cs">
+      <DependentUpon>AddClientWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Client.cs">
       <DependentUpon>TaroADO.tt</DependentUpon>
     </Compile>
+    <Compile Include="Commands\DataCommands.cs" />
     <Compile Include="PageClients.xaml.cs">
       <DependentUpon>PageClients.xaml</DependentUpon>
     </Compile>
@@ -111,6 +115,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>TaroADO.edmx</DependentUpon>
     </Compile>
+    <Page Include="AddClientWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -222,6 +230,12 @@
     <Content Include="Cards\Card8.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Images\cancel.png" />
+    <Resource Include="Images\edit.png" />
+    <Resource Include="Images\add.png" />
+    <Resource Include="Images\save.png" />
+    <Resource Include="Images\find.png" />
+    <Resource Include="Images\delete.png" />
     <Content Include="TaroADO.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>TaroADO.Context.cs</LastGenOutput>

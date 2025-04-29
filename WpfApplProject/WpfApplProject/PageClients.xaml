@@ -4,28 +4,115 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:FortuneTeller"
-      mc:Ignorable="d"
+      xmlns:cmd="clr-namespace:FortuneTeller.Commands" 
+    mc:Ignorable="d"
       d:DesignHeight="700" d:DesignWidth="750"
       Title="Історія Передбачень"
       Loaded="Page_Loaded">
+
+    <!-- Додаємо CommandBindings до кореневого елемента Page -->
+    <Page.CommandBindings>
+        <CommandBinding Command="{x:Static cmd:DataCommands.Undo}" Executed="Undo_Executed" CanExecute="Undo_CanExecute" />
+        <CommandBinding Command="{x:Static cmd:DataCommands.New}" Executed="New_Executed" CanExecute="New_CanExecute" />
+        <CommandBinding Command="{x:Static cmd:DataCommands.Replace}" Executed="Replace_Executed" CanExecute="Replace_CanExecute" />
+        <CommandBinding Command="{x:Static cmd:DataCommands.Save}" Executed="Save_Executed" CanExecute="Save_CanExecute" />
+        <CommandBinding Command="{x:Static cmd:DataCommands.Find}" Executed="Find_Executed" CanExecute="Find_CanExecute" />
+        <CommandBinding Command="{x:Static cmd:DataCommands.Delete}" Executed="Delete_Executed" CanExecute="Delete_CanExecute" />
+    </Page.CommandBindings>
+
     <Grid Margin="10" Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*" />
+            <!-- Row for Menu -->
             <RowDefinition Height="Auto"/>
+            <!-- Row for ToolBar -->
+            <RowDefinition Height="Auto"/>
+            <!-- Row for Title -->
+            <RowDefinition Height="*" />
+            <!-- Row for DataGrid -->
+            <RowDefinition Height="Auto"/>
+            <!-- Row for Delete Button -->
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Text="Історія Передбачень Клієнтів" FontSize="24" FontWeight="Bold" Foreground="#FFDCD8C5"
+        <!-- 1. Меню з прив'язкою команд -->
+        <Menu Grid.Row="0" Margin="0,0,0,5">
+            <MenuItem Header="Дія">
+                <MenuItem Header="Скасувати (_U)" Command="{x:Static cmd:DataCommands.Undo}">
+                    <!-- Command замість Click, _U для Alt+U -->
+                    <MenuItem.Icon>
+                        <Image Source="Images/cancel.png" Width="16" Height="16" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator />
+                <MenuItem Header="Створити (_N)" Command="{x:Static cmd:DataCommands.New}">
+                    <!-- Command замість Click, _N для Alt+N -->
+                    <MenuItem.Icon>
+                        <Image Source="Images/add.png" Width="16" Height="16" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Редагувати (_E)" Command="{x:Static cmd:DataCommands.Replace}">
+                    <!-- Command замість Click, _E для Alt+E -->
+                    <MenuItem.Icon>
+                        <Image Source="Images/edit.png" Width="16" Height="16" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Зберегти (_S)" Command="{x:Static cmd:DataCommands.Save}">
+                    <!-- Command замість Click, _S для Alt+S -->
+                    <MenuItem.Icon>
+                        <Image Source="Images/save.png" Width="16" Height="16" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Знайти (_F)" Command="{x:Static cmd:DataCommands.Find}">
+                    <!-- Command замість Click, _F для Alt+F -->
+                    <MenuItem.Icon>
+                        <Image Source="Images/find.png" Width="16" Height="16" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator />
+                <MenuItem Header="Видалити (_D)" Command="{x:Static cmd:DataCommands.Delete}">
+                    <!-- Command замість Click, _D для Alt+D -->
+                    <MenuItem.Icon>
+                        <Image Source="Images/delete.png" Width="16" Height="16" />
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+
+        <!-- 2. Панель інструментів (ToolBar) з прив'язкою команд -->
+        <ToolBarTray Grid.Row="1" Margin="0,0,0,5">
+            <ToolBar>
+                <!-- CommandTarget вказує, де шукати CommandBindings (у нашому випадку - на самій Page, тому можна не вказувати явно або вказати батьківський Grid/Page) -->
+                <Button ToolTip="Скасувати (Ctrl+Z)" Command="{x:Static cmd:DataCommands.Undo}">
+                    <Image Source="Images/cancel.png" Width="24" Height="24"/>
+                </Button>
+                <Separator />
+                <Button ToolTip="Створити (Ctrl+N)" Command="{x:Static cmd:DataCommands.New}">
+                    <Image Source="Images/add.png" Width="24" Height="24"/>
+                </Button>
+                <Button ToolTip="Редагувати (F2)" Command="{x:Static cmd:DataCommands.Replace}">
+                    <Image Source="Images/edit.png" Width="24" Height="24"/>
+                </Button>
+                <Button ToolTip="Зберегти (Ctrl+S)" Command="{x:Static cmd:DataCommands.Save}">
+                    <Image Source="Images/save.png" Width="24" Height="24"/>
+                </Button>
+                <Button ToolTip="Знайти (Ctrl+F)" Command="{x:Static cmd:DataCommands.Find}">
+                    <Image Source="Images/find.png" Width="24" Height="24"/>
+                </Button>
+                <Separator />
+                <Button ToolTip="Видалити (Del)" Command="{x:Static cmd:DataCommands.Delete}">
+                    <Image Source="Images/delete.png" Width="24" Height="24"/>
+                </Button>
+            </ToolBar>
+        </ToolBarTray>
+
+        <!-- Існуючі елементи, зсунуті вниз -->
+        <TextBlock Grid.Row="2" Text="Історія Передбачень Клієнтів" FontSize="24" FontWeight="Bold" Foreground="#FFDCD8C5"
                    HorizontalAlignment="Center" Margin="0,5,0,15"/>
 
-        <DataGrid Grid.Row="1"
+        <DataGrid Grid.Row="3"
                   Name="ClientHistoryGrid"
-                  AutoGenerateColumns="False"
-                  IsReadOnly="True"
-                  CanUserAddRows="False"
-                  CanUserDeleteRows="False"
-                  SelectionMode="Single"
-                  ItemsSource="{Binding ClientList}">
+                  ItemsSource="{Binding ClientList}"
+                  Style="{StaticResource {x:Type DataGrid}}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="60"/>
                 <DataGridTextColumn Header="Ім'я клієнта" Binding="{Binding Name}" Width="*"/>
@@ -34,7 +121,8 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <Button Grid.Row="2"
+        <!-- Кнопка "Видалити всю історію" залишається з Click, бо це окрема логіка -->
+        <Button Grid.Row="4"
                 Name="DeleteAllHistoryButton"
                 Content="Видалити всю історію"
                 HorizontalAlignment="Center"
