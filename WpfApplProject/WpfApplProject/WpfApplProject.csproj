@@ -103,6 +103,9 @@
     <Compile Include="Question.cs">
       <DependentUpon>TaroADO.tt</DependentUpon>
     </Compile>
+    <Compile Include="SearchClientsWindow.xaml.cs">
+      <DependentUpon>SearchClientsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TaroADO.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -147,6 +150,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="PageMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SearchClientsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

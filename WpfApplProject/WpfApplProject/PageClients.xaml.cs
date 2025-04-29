@@ -144,8 +144,21 @@ namespace FortuneTeller
 
         private void Find_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            // Логіка пошуку (наприклад, відкрити діалог пошуку)
-            MessageBox.Show("Виконано команду Знайти (Find)");
+            // Створюємо екземпляр нового вікна пошуку
+            var searchWindow = new SearchClientsWindow(); // Назва нового вікна
+
+            // Встановлюємо власника (опціонально, але добре для модальності, якщо потрібно)
+            Window parentWindow = Window.GetWindow(this);
+            if (parentWindow != null)
+            {
+                searchWindow.Owner = parentWindow;
+            }
+
+            // Показуємо вікно (не модально, щоб можна було працювати з обома)
+            searchWindow.Show();
+            // Якщо потрібне блокування головного вікна, використовуйте:
+            // searchWindow.ShowDialog();
+
             e.Handled = true;
         }
 

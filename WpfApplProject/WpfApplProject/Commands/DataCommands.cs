@@ -12,6 +12,8 @@ namespace FortuneTeller.Commands
         public static RoutedCommand Find { get; private set; }
         public static RoutedCommand Delete { get; private set; }
 
+        public static RoutedCommand Report { get; private set; }
+
         // Статичний конструктор для ініціалізації команд та комбінацій клавіш
         static DataCommands()
         {
@@ -45,6 +47,11 @@ namespace FortuneTeller.Commands
             InputGestureCollection deleteGestures = new InputGestureCollection();
             deleteGestures.Add(new KeyGesture(Key.D, ModifierKeys.Control, "Ctrl+D"));
             Delete = new RoutedCommand("Delete", typeof(DataCommands), deleteGestures);
+            // Звіт (Ctrl+R, опціонально)
+            InputGestureCollection reportGestures = new InputGestureCollection();
+            reportGestures.Add(new KeyGesture(Key.R, ModifierKeys.Control, "Ctrl+R"));
+            Report = new RoutedCommand("Report", typeof(DataCommands), reportGestures);
+            
         }
     }
 }
