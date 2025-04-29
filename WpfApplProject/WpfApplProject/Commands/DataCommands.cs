@@ -17,7 +17,7 @@ namespace FortuneTeller.Commands // Переконайтесь, що namespace �
         {
             // Скасувати (Ctrl+Z)
             InputGestureCollection undoGestures = new InputGestureCollection();
-            undoGestures.Add(new KeyGesture(Key.Z, ModifierKeys.Control, "Ctrl+Z"));
+            undoGestures.Add(new KeyGesture(Key.Q, ModifierKeys.Control, "Ctrl+Z"));
             Undo = new RoutedCommand("Undo", typeof(DataCommands), undoGestures);
 
             // Створити (Ctrl+N)

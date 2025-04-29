@@ -91,6 +91,9 @@
       <DependentUpon>TaroADO.tt</DependentUpon>
     </Compile>
     <Compile Include="Commands\DataCommands.cs" />
+    <Compile Include="EditClientWindow.xaml.cs">
+      <DependentUpon>EditClientWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PageClients.xaml.cs">
       <DependentUpon>PageClients.xaml</DependentUpon>
     </Compile>
@@ -116,6 +119,10 @@
       <DependentUpon>TaroADO.edmx</DependentUpon>
     </Compile>
     <Page Include="AddClientWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EditClientWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

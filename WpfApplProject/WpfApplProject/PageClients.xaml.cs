@@ -14,7 +14,7 @@ namespace FortuneTeller
 {
     public partial class PageClients : Page
     {
-        private bool isDirty = false; // <-- Додано логічне поле
+        private bool isDirty = false; 
 
         public PageClients()
         {
@@ -100,34 +100,40 @@ namespace FortuneTeller
             e.Handled = true;
         }
 
-        private void Replace_Executed(object sender, ExecutedRoutedEventArgs e)
+        private async void Replace_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            // Логіка редагування вибраного запису
-            MessageBox.Show($"Виконано команду Редагувати (Replace) для елемента: {((Client)ClientHistoryGrid.SelectedItem)?.Name}");
-            // Тут може бути код для відкриття форми редагування
-            // Після початку редагування:
-            // isDirty = true;
-            e.Handled = true;
-        }
+            // 1. Отримати вибраний елемент
+            if (ClientHistoryGrid.SelectedItem is Client selectedClient)
+            {
+                // 2. Створити вікно редагування, передавши вибраного клієнта
+                var editWindow = new EditClientWindow(selectedClient);
 
-        // Зберегти (Save)
-        private void Save_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            // Дозволити збереження, якщо є незбережені зміни
-            e.CanExecute = isDirty;
-            e.Handled = true;
-        }
+                // 3. Встановити власника
+                Window parentWindow = Window.GetWindow(this);
+                if (parentWindow != null)
+                {
+                    editWindow.Owner = parentWindow;
+                }
 
-        private async void Save_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            // Логіка збереження змін
-            MessageBox.Show("Виконано команду Зберегти (Save)");
-            // Тут буде логіка збереження даних у базу даних
-            // try { await _context.SaveChangesAsync(); isDirty = false; } catch ...
-            isDirty = false; // Після успішного збереження
-            e.Handled = true;
-        }
+                // 4. Показати вікно як модальний діалог
+                bool? result = editWindow.ShowDialog();
 
+                // 5. Перевірити результат і оновити DataGrid, якщо збереження було успішним
+                if (result == true)
+                {
+                    // Зміни було збережено у вікні редагування,
+                    // тому просто перезавантажуємо дані в таблиці
+                    await LoadClientHistoryAsync();
+                    MessageBox.Show("Дані клієнта успішно оновлено.", "Успіх", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Будь ласка, виберіть рядок для редагування.", "Рядок не вибрано", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+
+            e.Handled = true; // Позначаємо команду як оброблену
+        }
         // Знайти (Find)
         private void Find_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -222,9 +228,6 @@ namespace FortuneTeller
                     {
                         // Використовуємо ExecuteSqlCommandAsync для ефективного видалення всіх записів
                         await deleteContext.Database.ExecuteSqlCommandAsync("DELETE FROM Client");
-                        // Якщо є обмеження зовнішнього ключа або інші залежності, може знадобитися інший підхід
-                        // Наприклад, завантажити всі ID і видалити їх по одному або пачками
-                        // Або TRUNCATE TABLE Client, якщо СУБД це підтримує і немає обмежень
                     }
 
                     // Оновити відображення DataGrid після видалення
