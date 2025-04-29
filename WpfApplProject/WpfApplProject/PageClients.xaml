@@ -12,7 +12,6 @@
 
     <!-- Додаємо CommandBindings до кореневого елемента Page -->
     <Page.CommandBindings>
-        <CommandBinding Command="{x:Static cmd:DataCommands.Undo}" Executed="Undo_Executed" CanExecute="Undo_CanExecute" />
         <CommandBinding Command="{x:Static cmd:DataCommands.New}" Executed="New_Executed" CanExecute="New_CanExecute" />
         <CommandBinding Command="{x:Static cmd:DataCommands.Replace}" Executed="Replace_Executed" CanExecute="Replace_CanExecute" />
         <CommandBinding Command="{x:Static cmd:DataCommands.Save}" Executed="Save_Executed" CanExecute="Save_CanExecute" />
@@ -37,13 +36,6 @@
         <!-- 1. Меню з прив'язкою команд -->
         <Menu Grid.Row="0" Margin="0,0,0,5">
             <MenuItem Header="Дія">
-                <MenuItem Header="Скасувати (_U)" Command="{x:Static cmd:DataCommands.Undo}">
-                    <!-- Command замість Click, _U для Alt+U -->
-                    <MenuItem.Icon>
-                        <Image Source="Images/cancel.png" Width="16" Height="16" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <Separator />
                 <MenuItem Header="Створити (_N)" Command="{x:Static cmd:DataCommands.New}">
                     <!-- Command замість Click, _N для Alt+N -->
                     <MenuItem.Icon>
@@ -82,10 +74,6 @@
         <ToolBarTray Grid.Row="1" Margin="0,0,0,5">
             <ToolBar>
                 <!-- CommandTarget вказує, де шукати CommandBindings (у нашому випадку - на самій Page, тому можна не вказувати явно або вказати батьківський Grid/Page) -->
-                <Button ToolTip="Скасувати (Ctrl+Z)" Command="{x:Static cmd:DataCommands.Undo}">
-                    <Image Source="Images/cancel.png" Width="24" Height="24"/>
-                </Button>
-                <Separator />
                 <Button ToolTip="Створити (Ctrl+N)" Command="{x:Static cmd:DataCommands.New}">
                     <Image Source="Images/add.png" Width="24" Height="24"/>
                 </Button>

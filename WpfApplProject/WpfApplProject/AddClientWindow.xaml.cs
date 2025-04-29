@@ -4,7 +4,7 @@ using System.Windows;
 using System.Data.Entity;
 using System.Threading.Tasks;
 using WpfApplProject;
-using System.Windows.Input; 
+using System.Windows.Input;
 
 namespace FortuneTeller
 {

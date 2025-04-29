@@ -7,7 +7,8 @@ using System.Data.Entity;
 using System.Threading.Tasks;
 using WpfApplProject;
 using System.Windows.Input; 
-using FortuneTeller.Commands; 
+using FortuneTeller.Commands;
+using System.Data.Entity.Infrastructure; 
 
 namespace FortuneTeller
 {
@@ -18,7 +19,6 @@ namespace FortuneTeller
         public PageClients()
         {
             InitializeComponent();
-            // Прив'язки команд будуть у XAML
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
@@ -54,24 +54,6 @@ namespace FortuneTeller
             isDirty = false;
         }
 
-        // --- Обробники команд ---
-
-        // Скасувати (Undo)
-        private void Undo_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            // Дозволити скасування, якщо є незбережені зміни
-            e.CanExecute = isDirty;
-            e.Handled = true; // Позначити як оброблене
-        }
-
-        private void Undo_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            // Логіка скасування змін (наприклад, перезавантажити дані)
-            MessageBox.Show("Виконано команду Скасувати (Undo)");
-            // await LoadClientHistoryAsync(); // Потенційно перезавантажити дані для скасування
-            isDirty = false; // Скасування повертає до "чистого" стану
-            e.Handled = true;
-        }
 
         // Створити (New)
         private void New_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -171,24 +153,59 @@ namespace FortuneTeller
 
         private async void Delete_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            // Логіка видалення вибраного запису
-            if (ClientHistoryGrid.SelectedItem is Client selectedClient)
+            // 1. Отримати вибраний елемент
+            if (ClientHistoryGrid.SelectedItem is Client selectedClient) // Використовуємо pattern matching
             {
-                var result = MessageBox.Show($"Ви впевнені, що хочете видалити запис для '{selectedClient.Name}'?",
-                                             "Підтвердження видалення", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                // 2. Підтвердити видалення у користувача
+                var result = MessageBox.Show($"Ви впевнені, що хочете видалити запис для '{selectedClient.Name}' (ID: {selectedClient.Id})?",
+                                             "Підтвердження видалення",
+                                             MessageBoxButton.YesNo,
+                                             MessageBoxImage.Warning);
+
                 if (result == MessageBoxResult.Yes)
                 {
-                    MessageBox.Show($"Виконано команду Видалити (Delete) для: {selectedClient.Name}");
-                    // Логіка видалення з бази даних
-                    // try { _context.Client.Remove(selectedClient); await _context.SaveChangesAsync(); await LoadClientHistoryAsync(); } catch...
-                    await LoadClientHistoryAsync(); // Оновити список після видалення
+                    // 3. Спробувати видалити запис з бази даних
+                    try
+                    {
+                        // Створюємо новий контекст даних ТІЛЬКИ для цієї операції
+                        using (var dbContext = new TaroDBEntities())
+                        {
+                            // Оскільки selectedClient був завантажений іншим екземпляром контексту,
+                            // нам потрібно "прикріпити" його до поточного контексту,
+                            // щоб EF знав, який запис у базі даних потрібно видалити.
+                            dbContext.Client.Attach(selectedClient);
+
+                            // Позначити об'єкт для видалення
+                            dbContext.Client.Remove(selectedClient);
+
+                            // Зберегти зміни в базі даних
+                            await dbContext.SaveChangesAsync();
+                        } // Контекст автоматично звільняється тут
+
+                        // 4. Якщо видалення пройшло успішно, оновити DataGrid
+                        await LoadClientHistoryAsync();
+
+                        MessageBox.Show("Запис успішно видалено.", "Видалення завершено", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    catch (DbUpdateException dbEx) // Обробка помилок оновлення БД (напр., обмеження зовнішнього ключа)
+                    {
+                        Console.WriteLine($"Database Delete Error (DbUpdateException): {dbEx.ToString()}"); // Логування для налагодження
+                        MessageBox.Show($"Помилка видалення запису з бази даних. Можливо, існують пов'язані дані, які заважають видаленню.\n\nДеталі: {dbEx.InnerException?.Message ?? dbEx.Message}",
+                                        "Помилка бази даних", MessageBoxButton.OK, MessageBoxImage.Error);
+                        // Не перезавантажуємо дані, оскільки видалення не вдалося
+                    }
+                    catch (Exception ex) // Обробка інших можливих помилок
+                    {
+                        Console.WriteLine($"General Delete Error: {ex.ToString()}"); // Логування для налагодження
+                        MessageBox.Show($"Сталася помилка під час видалення запису: {ex.Message}",
+                                       "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        // Не перезавантажуємо дані, оскільки видалення не вдалося
+                    }
                 }
             }
-            e.Handled = true;
+            e.Handled = true; 
         }
 
-        // Існуючий обробник кнопки "Видалити всю історію" залишається без змін,
-        // оскільки команда Delete стосується вибраного елемента.
         private async void DeleteAllHistoryButton_Click(object sender, RoutedEventArgs e)
         {
             var result = MessageBox.Show("Ви впевнені, що хочете видалити ВСЮ історію передбачень?\nЦю дію неможливо скасувати.",
