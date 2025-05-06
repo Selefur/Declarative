@@ -7,7 +7,7 @@ namespace FortuneTeller.Commands
         // Оголошення статичних властивостей RoutedCommand
         public static RoutedCommand Undo { get; private set; }
         public static RoutedCommand New { get; private set; }
-        public static RoutedCommand Replace { get; private set; } // Редагувати
+        public static RoutedCommand Replace { get; private set; } 
         public static RoutedCommand Save { get; private set; }
         public static RoutedCommand Find { get; private set; }
         public static RoutedCommand Delete { get; private set; }

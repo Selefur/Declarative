@@ -5,7 +5,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="b6e209a4ce714f4688b446ed056e24b1" Name="Diagram1">
-        <EntityTypeShape EntityType="TaroDBModel.Client" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="TaroDBModel.Client" Width="1.5" PointX="3.625" PointY="1.125" IsExpanded="true" />
         <EntityTypeShape EntityType="TaroDBModel.Question" Width="1.5" PointX="0.75" PointY="1.125" IsExpanded="true" />
         <AssociationConnector Association="TaroDBModel.FK__Client__IDQuesti__267ABA7A" ManuallyRouted="false" />
       </Diagram>

@@ -50,7 +50,6 @@
         <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"
                     Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
 
-            <!-- Кнопка Зберегти тепер використовує команду Save -->
             <Button x:Name="SaveButton"
                     Style="{StaticResource ButtonStyle}" Margin="0,0,10,0"
                     Command="{x:Static cmd:DataCommands.Save}"
@@ -60,9 +59,7 @@
                     <TextBlock Text="Зберегти"/>
                 </StackPanel>
             </Button>
-            <!-- IsDefault="True" прибрано, бо команда може обробляти Enter -->
 
-            <!-- Кнопка Скасувати використовує команду Undo -->
             <Button x:Name="CancelButton"
                     Style="{StaticResource ButtonStyle}"
                     Command="{x:Static cmd:DataCommands.Undo}"

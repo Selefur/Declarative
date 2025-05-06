@@ -36,26 +36,22 @@
         <Menu Grid.Row="0" Margin="0,0,0,5">
             <MenuItem Header="Дія">
                 <MenuItem Header="Створити (_N)" Command="{x:Static cmd:DataCommands.New}">
-                    <!-- Command замість Click, _N для Alt+N -->
                     <MenuItem.Icon>
                         <Image Source="Images/add.png" Width="16" Height="16" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="Редагувати (_E)" Command="{x:Static cmd:DataCommands.Replace}">
-                    <!-- Command замість Click, _E для Alt+E -->
                     <MenuItem.Icon>
                         <Image Source="Images/edit.png" Width="16" Height="16" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="Знайти (_F)" Command="{x:Static cmd:DataCommands.Find}">
-                    <!-- Command замість Click, _F для Alt+F -->
                     <MenuItem.Icon>
                         <Image Source="Images/find.png" Width="16" Height="16" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator />
                 <MenuItem Header="Видалити (_D)" Command="{x:Static cmd:DataCommands.Delete}">
-                    <!-- Command замість Click, _D для Alt+D -->
                     <MenuItem.Icon>
                         <Image Source="Images/delete.png" Width="16" Height="16" />
                     </MenuItem.Icon>
@@ -66,7 +62,6 @@
         <!-- 2. Панель інструментів (ToolBar) з прив'язкою команд -->
         <ToolBarTray Grid.Row="1" Margin="0,0,0,5">
             <ToolBar>
-                <!-- CommandTarget вказує, де шукати CommandBindings (у нашому випадку - на самій Page, тому можна не вказувати явно або вказати батьківський Grid/Page) -->
                 <Button ToolTip="Створити (Ctrl+N)" Command="{x:Static cmd:DataCommands.New}">
                     <Image Source="Images/add.png" Width="24" Height="24"/>
                 </Button>
@@ -83,7 +78,6 @@
             </ToolBar>
         </ToolBarTray>
 
-        <!-- Існуючі елементи, зсунуті вниз -->
         <TextBlock Grid.Row="2" Text="Історія Передбачень Клієнтів" FontSize="24" FontWeight="Bold" Foreground="#FFDCD8C5"
                    HorizontalAlignment="Center" Margin="0,5,0,15"/>
 
@@ -99,7 +93,6 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <!-- Кнопка "Видалити всю історію" залишається з Click, бо це окрема логіка -->
         <Button Grid.Row="4"
                 Name="DeleteAllHistoryButton"
                 Content="Видалити всю історію"

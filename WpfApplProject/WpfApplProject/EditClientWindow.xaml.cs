@@ -11,26 +11,24 @@ namespace FortuneTeller
 {
     public partial class EditClientWindow : Window
     {
-        private readonly Client _clientToEdit; // Зберігаємо клієнта для редагування
+        private readonly Client _clientToEdit; 
 
-        // Змінений конструктор: приймає Client
         public EditClientWindow(Client client)
         {
             InitializeComponent();
             if (client == null)
             {
-                // Це не повинно статися, якщо викликається правильно, але краще перевірити
                 MessageBox.Show("Помилка: Не передано дані клієнта для редагування.", "Критична помилка", MessageBoxButton.OK, MessageBoxImage.Error);
-                this.Close(); // Закриваємо вікно, якщо немає даних
+                this.Close(); 
                 return;
             }
-            _clientToEdit = client; // Зберігаємо переданого клієнта
+            _clientToEdit = client;
         }
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            await LoadQuestionsAsync(); // Завантажуємо питання
-            PopulateFields();           // Заповнюємо поля даними
+            await LoadQuestionsAsync();
+            PopulateFields();          
             NameTextBox.Focus();
         }
 
@@ -41,7 +39,6 @@ namespace FortuneTeller
             {
                 NameTextBox.Text = _clientToEdit.Name;
                 AnswerTextBox.Text = _clientToEdit.Answer;
-                // Вибір правильного питання в ComboBox відбудеться після їх завантаження в LoadQuestionsAsync
             }
         }
 
@@ -54,25 +51,21 @@ namespace FortuneTeller
                     var questions = await dbContext.Question.OrderBy(q => q.Name).ToListAsync();
                     QuestionComboBox.ItemsSource = questions;
 
-                    // Після завантаження питань, встановлюємо вибране значення
-                    if (_clientToEdit.IDQuestion.HasValue) // Перевіряємо, чи є ID питання
+                    if (_clientToEdit.IDQuestion.HasValue) 
                     {
-                        // Переконуємось, що таке питання існує в списку
                         if (questions.Any(q => q.Id == _clientToEdit.IDQuestion.Value))
                         {
                             QuestionComboBox.SelectedValue = _clientToEdit.IDQuestion.Value;
                         }
                         else
                         {
-                            // Якщо питання клієнта немає в списку (видалено?),
-                            // можна вибрати перше або залишити порожнім
+                            
                             if (questions.Any()) QuestionComboBox.SelectedIndex = 0;
                             MessageBox.Show("Попередження: Категорія питання, що була раніше вибрана для цього клієнта, не знайдена. Виберіть нову.", "Питання не знайдено", MessageBoxButton.OK, MessageBoxImage.Warning);
                         }
                     }
                     else if (questions.Any())
                     {
-                        // Якщо у клієнта не було питання, вибираємо перше доступне
                         QuestionComboBox.SelectedIndex = 0;
                     }
                 }
@@ -118,48 +111,38 @@ namespace FortuneTeller
             {
                 using (var dbContext = new TaroDBEntities())
                 {
-                    // **Дуже важливо: Прикріпити об'єкт до нового контексту**
-                    // Це повідомляє EF, що ми працюємо з існуючим записом.
                     dbContext.Client.Attach(_clientToEdit);
 
-                    // **Оновити властивості прикріпленого об'єкта**
                     _clientToEdit.Name = NameTextBox.Text.Trim();
                     _clientToEdit.IDQuestion = (int)QuestionComboBox.SelectedValue;
                     _clientToEdit.Answer = AnswerTextBox.Text.Trim();
 
-                    // Позначити об'єкт як змінений (Attach робить його Unchanged,
-                    // оновлення властивостей робить його Modified)
-                    // Явно вказувати State не обов'язково, якщо властивості змінено,
-                    // але для ясності можна: dbContext.Entry(_clientToEdit).State = EntityState.Modified;
-
-                    // Зберегти зміни (EF згенерує UPDATE)
                     await dbContext.SaveChangesAsync();
 
-                    // Сигналізуємо про успіх
                     this.DialogResult = true;
                 }
             }
-            catch (DbUpdateConcurrencyException dbConcEx) // Обробка конфліктів паралельного доступу
+            catch (DbUpdateConcurrencyException dbConcEx) 
             {
                 Console.WriteLine($"Database Save Error (DbUpdateConcurrencyException): {dbConcEx.ToString()}");
                 MessageBox.Show("Помилка збереження: Дані було змінено іншим користувачем після того, як ви їх завантажили. Перезавантажте дані та спробуйте ще раз.",
                                 "Конфлікт даних", MessageBoxButton.OK, MessageBoxImage.Warning);
-                this.DialogResult = false; // Сигналізуємо, що збереження не вдалося через конфлікт
+                this.DialogResult = false; 
             }
-            catch (DbUpdateException dbEx) // Обробка інших помилок оновлення
+            catch (DbUpdateException dbEx) 
             {
                 Console.WriteLine($"Database Save Error (DbUpdateException): {dbEx.ToString()}");
                 MessageBox.Show($"Помилка збереження даних: {dbEx.InnerException?.Message ?? dbEx.Message}",
                                 "Помилка бази даних", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            catch (Exception ex) // Загальні помилки
+            catch (Exception ex) 
             {
                 Console.WriteLine($"General Save Error: {ex.ToString()}");
                 MessageBox.Show($"Помилка збереження даних: {ex.Message}", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             finally
             {
-                e.Handled = true; // Позначаємо команду як оброблену
+                e.Handled = true;
             }
         }
 

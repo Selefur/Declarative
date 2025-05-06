@@ -3,8 +3,8 @@ using System.Linq;
 using System.Windows;
 using System.Data.Entity;
 using System.Threading.Tasks;
-using WpfApplProject; // Ваш простір імен моделі та контексту
-using System.Windows.Input; // Потрібно для команд
+using WpfApplProject; 
+using System.Windows.Input; 
 
 namespace FortuneTeller
 {
@@ -13,7 +13,6 @@ namespace FortuneTeller
         public SearchClientsWindow()
         {
             InitializeComponent();
-            // Можна встановити фокус на поле пошуку при відкритті
             Loaded += (sender, e) => SearchTextBox.Focus();
         }
 
@@ -34,8 +33,6 @@ namespace FortuneTeller
                 {
                     var searchResults = await dbContext.Client
                         .Include(c => c.Question)
-                        // Розгляньте використання IndexOf для пошуку без урахування регістру:
-                        // .Where(c => c.Name.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0)
                         .Where(c => c.Name.Contains(searchText))
                         .OrderBy(c => c.Name)
                         .ToListAsync();
@@ -65,14 +62,12 @@ namespace FortuneTeller
         // --- Обробники команди Undo (Скасувати/Закрити) ---
         private void Undo_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            // Завжди можна закрити вікно пошуку
             e.CanExecute = true;
             e.Handled = true;
         }
 
         private void Undo_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            // Дія - просто закрити вікно
             this.Close();
             e.Handled = true;
         }

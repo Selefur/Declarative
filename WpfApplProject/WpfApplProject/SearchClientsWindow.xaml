@@ -10,10 +10,8 @@
         WindowStartupLocation="CenterOwner" MinWidth="400" MinHeight="300"
         Background="{StaticResource LinearPanelBrush}">
 
-    <!-- CommandBinding тільки для Undo (Скасувати/Закрити) -->
     <Window.CommandBindings>
         <CommandBinding Command="{x:Static cmd:DataCommands.Undo}" Executed="Undo_Executed" CanExecute="Undo_CanExecute" />
-        <!-- Не додаємо CommandBinding для Save, оскільки кнопка завжди неактивна -->
     </Window.CommandBindings>
 
     <Grid Margin="10">
@@ -52,14 +50,12 @@
         <!-- Панель кнопок "Скасувати" (Grid.Row="2") -->
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
            
-            <!-- Кнопка Скасувати (Закрити) використовує команду Undo -->
             <Button x:Name="CancelButton"
                     Style="{StaticResource ButtonStyle}"
                     Command="{x:Static cmd:DataCommands.Undo}"
-                    ToolTip="Закрити вікно пошуку (Ctrl+Z)">
+                    ToolTip="Закрити вікно пошуку (Ctrl+Q)">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="Images/cancel.png" Width="16" Height="16" Margin="0,0,5,0"/>
-                    <!-- Змінимо текст на більш відповідний -->
                     <TextBlock Text="Закрити"/>
                 </StackPanel>
             </Button>

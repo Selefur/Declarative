@@ -45,16 +45,6 @@ namespace FortuneTeller
             ClearPrediction();
             PredictButton.IsEnabled = _loadedCategories.Any(); 
         }
-
-        // --- Copy Methods from original MainWindow.xaml.cs that are needed here ---
-        // LoadCategoriesFromDbAsync
-        // PredictButton_Click
-        // GetPredictionPhrase
-        // SavePredictionToDbAsync (Ensure DB Id handling is correct - IDENTITY or manual)
-        // LoadDefaultCards
-        // ClearPrediction
-        // CreateImage
-
         private async Task LoadCategoriesFromDbAsync()
         {
             try
@@ -125,7 +115,6 @@ namespace FortuneTeller
             {
                 CardGrid.Children.Add(CreateImage(cardPath));
             }
-            // --- End Card Logic ---
 
 
             string prediction = GetPredictionPhrase();
@@ -243,10 +232,5 @@ namespace FortuneTeller
             }
         }
 
-        // Optional: Dispose context if needed, though a new one is created each time
-        // private void Page_Unloaded(object sender, RoutedEventArgs e)
-        // {
-        //     _context?.Dispose();
-        // }
     }
 }
