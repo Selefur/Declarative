@@ -238,7 +238,7 @@ namespace FortuneTeller
                 return new Image
                 {
                     Source = new BitmapImage(new Uri(path, UriKind.Relative)), 
-                    Height = 450, 
+                    Height = 600, 
                     Stretch = System.Windows.Media.Stretch.Uniform,
                     Margin = new Thickness(5)
                 };

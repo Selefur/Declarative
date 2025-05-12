@@ -51,8 +51,6 @@
             <Setter Property="BorderBrush" Value="#FF907209"/>
             <Setter Property="AutoGenerateColumns" Value="False"/>
             <Setter Property="IsReadOnly" Value="True"/>
-            <Setter Property="CanUserAddRows" Value="False"/>
-            <Setter Property="CanUserDeleteRows" Value="False"/>
             <Setter Property="SelectionMode" Value="Single"/>
             <Setter Property="AlternatingRowBackground" Value="#FF5a544a"/>
             <!-- Slightly lighter alt row -->

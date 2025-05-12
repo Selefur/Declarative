@@ -4,7 +4,6 @@ namespace FortuneTeller.Commands
 {
     public static class DataCommands
     {
-        // Оголошення статичних властивостей RoutedCommand
         public static RoutedCommand Undo { get; private set; }
         public static RoutedCommand New { get; private set; }
         public static RoutedCommand Replace { get; private set; } 
@@ -14,7 +13,6 @@ namespace FortuneTeller.Commands
 
         public static RoutedCommand Report { get; private set; }
 
-        // Статичний конструктор для ініціалізації команд та комбінацій клавіш
         static DataCommands()
         {
             // Скасувати (Ctrl+Z)
@@ -30,7 +28,6 @@ namespace FortuneTeller.Commands
             // Редагувати (F2 або Ctrl+E - оберіть один варіант, тут F2)
             InputGestureCollection replaceGestures = new InputGestureCollection();
             replaceGestures.Add(new KeyGesture(Key.F2, ModifierKeys.None, "F2"));
-            // Або: replaceGestures.Add(new KeyGesture(Key.E, ModifierKeys.Control, "Ctrl+E"));
             Replace = new RoutedCommand("Replace", typeof(DataCommands), replaceGestures);
 
             // Зберегти (Ctrl+S)
@@ -47,10 +44,6 @@ namespace FortuneTeller.Commands
             InputGestureCollection deleteGestures = new InputGestureCollection();
             deleteGestures.Add(new KeyGesture(Key.D, ModifierKeys.Control, "Ctrl+D"));
             Delete = new RoutedCommand("Delete", typeof(DataCommands), deleteGestures);
-            // Звіт (Ctrl+R, опціонально)
-            InputGestureCollection reportGestures = new InputGestureCollection();
-            reportGestures.Add(new KeyGesture(Key.R, ModifierKeys.Control, "Ctrl+R"));
-            Report = new RoutedCommand("Report", typeof(DataCommands), reportGestures);
             
         }
     }
